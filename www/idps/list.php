@@ -31,7 +31,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 		?>
 		<li><a href="/profiles/?idp=<?= o($idp->getEntityID()) ?>" class="btn <?= $idp->size ?>">
 			<span class="title"><?= o($idp->getTitle()) ?></span>
-			<?php if($geo) { ?>
+			<?php if($geo && $idp->getGeo()) { ?>
 			<small><small><?= round(min($idp->getDistanceFrom($lat, $lon))) ?>&nbsp;km</small></small>
 			<?php } ?>
 			</a></li>
