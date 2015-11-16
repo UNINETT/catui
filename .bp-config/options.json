@@ -1,0 +1,5 @@
+{
+	"WEBDIR": "www",
+	"PHP_EXTENSIONS": ["curl", "geoip"],
+	"WEB_SERVER": "nginx"
+}
