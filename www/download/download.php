@@ -10,7 +10,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">Eduroam</a></li>
 <?php if ($canListProfiles) { ?>
 	<li><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>"><?= o($idp->getDisplay()) ?></a></li>
-<?php } else { ?>
+<?php } elseif ($idp->getDisplay() != $profile->getDisplay()) { ?>
 	<li><?= o($idp->getDisplay()) ?></li>
 <?php } ?>
 	<li><a href="<?= o(makeQueryString(['os' => ''])) ?>"><?= o($profile->getDisplay()) ?></a></li>
