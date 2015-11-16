@@ -1,3 +1,59 @@
+<?php
+function href($url) {
+	$result = '';
+	$parsed = parse_url($url);
+	if (!$parsed) {
+		return 'javascript:void(0)';
+	}
+	if (isset($parsed['scheme'])) {
+		$result .= $parsed['scheme'] . '://';
+	} else {
+		return href('http://' . $url);
+	}
+	if (isset($parsed['host'])) {
+		$result .= $parsed['host'];
+	}
+	if (isset($parsed['port'])) {
+		$result .= ':' . $parsed['port'];
+	}
+	if (isset($parsed['path'])) {
+		$result .= $parsed['path'];
+	}
+	if (isset($parsed['query'])) {
+		$result .= '?' . $parsed['query'];
+	}
+	if (isset($parsed['fragment'])) {
+		$result .= '#' . $parsed['fragment'];
+	}
+	return $result;
+}
+function url($url) {
+	$result = '';
+	$parsed = parse_url($url);
+	if (!$parsed) {
+		return $url;
+	}
+	if (!isset($parsed['scheme'])) {
+		return url('http://' . $url);
+	}
+	if (isset($parsed['host'])) {
+		$result .= substr($parsed['host'], 0, 4) === 'www.' ? substr($parsed['host'], 4) : $parsed['host'];
+	}
+	if (isset($parsed['port'])) {
+		$result .= ':' . $parsed['port'];
+	}
+	if (isset($parsed['path'])) {
+		$result .= $parsed['path'];
+	}
+	if (isset($parsed['query'])) {
+		$result .= '?' . $parsed['query'];
+	}
+	if (isset($parsed['fragment'])) {
+		$result .= '#' . $parsed['fragment'];
+	}
+	return $result;
+}
+?>
 <h1><?= o($idp->getDisplay()) ?></h1>
 <?php if (!is_null($idp->getIconID())) { ?>
 <p><img src="<?= o($idp->getIconUrl()) ?>" alt="<?= o($idp->getDisplay()) ?> logo" style="max-width:100%">
@@ -19,7 +75,7 @@
 <?php } ?>
 
 <?php if($profile->getLocalUrl()) { ?>
-<span><a href="<?= o($profile->getLocalUrl()) ?>"><?= o($profile->getLocalUrl()) ?></a></span>
+<span><a href="<?= o(href($profile->getLocalUrl())) ?>"><?= o(url($profile->getLocalUrl())) ?></a></span>
 <?php } ?>
 </address>
 <?php } else { ?>
