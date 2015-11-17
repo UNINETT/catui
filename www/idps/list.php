@@ -64,7 +64,7 @@ if (navigator.geolocation) {
 <?php } ?>
 
 function inst_search() {
-	var needle = $('#inst_search').val();
+	var needle = $('#cat-inst-search').val();
 	$('ul.insts li').each(function(index){
 		if (needle.length == 0 || $(this, '.title').text().toLowerCase().indexOf(needle.toLowerCase()) > -1) {
 			$(this).show();
@@ -86,8 +86,8 @@ function cat_geolocate() {
 		window.location = <?= json_encode($geoQueryString) ?> + geo;
 	}
 	navigator.geolocation.getCurrentPosition(redirect_position);
-}
+};
 
-$('#inst_search').keyup(inst_search);
-$('#inst_search').change(inst_search);
+$('#cat-inst-search').keyup(inst_search);
+$('#cat-inst-search').change(inst_search);
 </script>
