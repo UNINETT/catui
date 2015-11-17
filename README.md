@@ -6,6 +6,12 @@ CAT as its backend and does not need a database to function.  However, it will
 store cache files in the system temp directory in order to offload the
 international CAT server.
 
+## Goal
+The goal of this project is to provide a user friendly user interface towards
+the CAT database.  This should help convince local eduroam administrators to
+put their profiles on CAT.  There are still many institutions that provide
+eduroam, but have not registered on CAT yet.
+
 ## Features
 * Bookmarkable/documentable URLs
 * Use browser's built-in history (previous/next page)
