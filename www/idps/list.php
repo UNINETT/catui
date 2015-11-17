@@ -39,7 +39,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 		</ul>
 		<?php } ?>
 	<hr>
-	<p><a href="https://cat.eduroam.org/">List all institutions worldwide</a></p>
+	<p><small><a href="https://cat.eduroam.org/">List all institutions worldwide</a></small></p>
 </div>
 </div>
 
