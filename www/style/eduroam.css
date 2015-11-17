@@ -2,7 +2,7 @@
 	max-width:82em;
 }
 
-ul.insts {
+.insts, .cat-inst-action {
 	padding: 0;
 }
 .cat-institution-search input {
@@ -10,7 +10,7 @@ ul.insts {
 	display: block;
 	width: 100%;
 }
-.insts li {
+.insts li, .cat-inst-action li {
 	display: inline-block;
 }
 

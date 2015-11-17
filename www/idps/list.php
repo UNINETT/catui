@@ -17,9 +17,20 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 	<?php foreach($_GET as $key => $value) if ($key !== 'inst_search') {
 		echo '<input type="hidden" name="' . o($key) . '" value="' . o($value) . '">';
 	} ?>
-	<p><input type="text" name="inst_search" id="inst_search" value="<?= o($_GET['inst_search']) ?>" placeholder="Institute of …" autofocus></p>
+	<p><input type="text" name="inst_search" id="cat-inst-search" value="<?= o($_GET['inst_search']) ?>" placeholder="Institute of …" autofocus></p>
 	</form>
 </div>
+</div>
+</div>
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 cat-institution-select">
+	<ul class="cat-inst-action" style="text-align: right">
+		<?php if (!isset($_GET['geo'])) { ?>
+		<li class="pull-left" style="display:none"><a href="javascript:cat_geolocate()">Show institutions close to my current location</a></li>
+		<?php } ?>
+		<li><a href="https://cat.eduroam.org/">List all institutions worldwide</a></li>
+	</ul>
+	<hr>
 </div>
 </div>
 <div class="row">
@@ -36,10 +47,8 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 			<?php } ?>
 			</a></li>
 		<?php } ?>
-		</ul>
-		<?php } ?>
-	<hr>
-	<p><small><a href="https://cat.eduroam.org/">List all institutions worldwide</a></small></p>
+	</ul>
+	<?php } ?>
 </div>
 </div>
 
@@ -48,7 +57,13 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <?php require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'footer.php']); ?>
 
 <script type="application/javascript">
-var inst_search = function() {
+<?php if (!isset($_GET['geo'])) { ?>
+if (navigator.geolocation) {
+	$('.cat-inst-action li').show();
+};
+<?php } ?>
+
+function inst_search() {
 	var needle = $('#inst_search').val();
 	$('ul.insts li').each(function(index){
 		if (needle.length == 0 || $(this, '.title').text().toLowerCase().indexOf(needle.toLowerCase()) > -1) {
@@ -57,7 +72,22 @@ var inst_search = function() {
 			$(this).hide();
 		}
 	})
+};
+
+function cat_geolocate() {
+	function replaceQueryParam(param, newval, search) {
+		var regex = new RegExp("([?;&])" + param + "[^&;]*[;&]?");
+		var query = search.replace(regex, "$1").replace(/&$/, '');
+
+		return (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
+	}
+	function redirect_position(position) {
+		geo = position.coords.latitude + ',' + position.coords.longitude;
+		window.location = <?= json_encode($geoQueryString) ?> + geo;
+	}
+	navigator.geolocation.getCurrentPosition(redirect_position);
 }
+
 $('#inst_search').keyup(inst_search);
 $('#inst_search').change(inst_search);
 </script>
