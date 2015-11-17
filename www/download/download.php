@@ -2,7 +2,11 @@
 $bootstrapStyle = $device->isRedirect() ? 'btn btn-warning' : 'btn btn-success';
 $catStyle = $device->isRedirect() ? 'cat-btn-redirect' : 'cat-btn-download';
 
-$title = 'Eduroam connect utility';
+$title = 'Eduroam ' . $idp->getDisplay();
+if ($canListProfiles || $profile->getDisplay() != $idp->getDisplay()) {
+	$title .= ' ' . $profile->getDisplay();
+}
+$title .= ' for ' . $device->getDisplay();
 require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
 ?>
 

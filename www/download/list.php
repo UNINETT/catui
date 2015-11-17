@@ -1,5 +1,8 @@
 <?php
-$title = 'Eduroam connect utility';
+$title = 'Eduroam ' . $idp->getDisplay();
+if ($canListProfiles || $profile->getDisplay() != $idp->getDisplay()) {
+	$title .= ' ' . $profile->getDisplay();
+}
 require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
 ?>
 

@@ -1,5 +1,5 @@
 <?php
-$title = 'Eduroam connect utility';
+$title = 'Eduroam providers';
 require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
 ?>
 

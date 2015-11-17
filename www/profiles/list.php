@@ -1,5 +1,5 @@
 <?php
-$title = 'Eduroam connect utility';
+$title = 'Eduroam ' . $idp->getDisplay();
 require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
 ?>
 
