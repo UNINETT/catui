@@ -3,11 +3,17 @@
 	text-align: center;
 }
 
-.insts, .cat-inst-action {
+.insts {
+	line-height: 4em !important;
+}
+.insts, .cat-inst-action, .cat-alt-download {
 	padding: 0;
 }
-.insts li, .cat-inst-action li {
+.insts li, .cat-inst-action li, .cat-alt-download li {
 	display: inline-block;
+}
+.cat-alt-download li {
+	padding-right: 2em;
 }
 
 ul.cat-profiles {

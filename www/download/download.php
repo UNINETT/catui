@@ -57,10 +57,12 @@ You will be redirected to <a href="<?= o($device->getRedirect()) ?>"><?= o($devi
 <p><?= o($device->getDeviceCustomtext()); ?></p>
 <?php } ?>
 
-<p><small>
-<a href="<?= o(makeQueryString(['os' => ''])) ?>">Other operating system</a>
-</small>
-</p>
+<ul class="cat-alt-download">
+<li><a href="<?= o(makeQueryString(['os' => ''])) ?>">Different operating system</a></li>
+<?php if ($canListProfiles) { ?>
+<li><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>">Different profile</a></li>
+<?php } ?>
+</ul>
 </main>
 </div>
 </div>
