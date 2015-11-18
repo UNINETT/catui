@@ -2,7 +2,7 @@
 $bootstrapStyle = $device->isRedirect() ? 'btn btn-warning' : 'btn btn-success';
 $catStyle = $device->isRedirect() ? 'cat-btn-redirect' : 'cat-btn-download';
 
-$title = 'Eduroam ' . $idp->getDisplay();
+$title = 'eduroam ' . $idp->getDisplay();
 if ($canListProfiles || $profile->getDisplay() != $idp->getDisplay()) {
 	$title .= ' ' . $profile->getDisplay();
 }
@@ -11,7 +11,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 ?>
 
 <ol class="breadcrumb">
-	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">Eduroam</a></li>
+	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">eduroam</a></li>
 <?php if ($canListProfiles) { ?>
 	<li><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>"><?= o($idp->getDisplay()) ?></a></li>
 <?php } elseif ($idp->getDisplay() != $profile->getDisplay()) { ?>

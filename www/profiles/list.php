@@ -1,10 +1,10 @@
 <?php
-$title = 'Eduroam ' . $idp->getDisplay();
+$title = 'eduroam ' . $idp->getDisplay();
 require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
 ?>
 
 <ol class="breadcrumb">
-	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">Eduroam</a></li>
+	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">eduroam</a></li>
 	<li class="active"><?= o($idp->getDisplay()) ?></li>
 </ol>
 

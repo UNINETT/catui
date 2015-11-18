@@ -1,10 +1,10 @@
 <?php
-$title = 'Eduroam providers';
+$title = 'eduroam providers';
 require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
 ?>
 
 <ol class="breadcrumb">
-	<li class="active">Eduroam</li>
+	<li class="active">eduroam</li>
 </ol>
 
 <main class="container">

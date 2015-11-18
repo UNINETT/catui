@@ -35,7 +35,7 @@
 
 <footer class="legal">
 This web page is licensed under the terms of the GNU Affero General Public License.<br>
-The profiles are licensed under the terms of the GÉANT Standard Open Source Software Outward Licence.
+The profiles are licensed under the CAT ToS
 </footer>
 
 <script src="../style/jquery-2.1.4.min.js" crossorigin="anonymous"></script>

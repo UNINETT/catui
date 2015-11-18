@@ -1,4 +1,4 @@
-# Eduroam connect utility
+# eduroam configurator
 
 This program will provide end users with an easy and convenient front-end to the
 CAT (Configuration Assistance Tool, cat.eduroam.org).  This application will use
