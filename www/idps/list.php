@@ -10,17 +10,17 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <main class="container">
 <div class="row">
 <div class="cat-institution-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<h1>Select your institution to get started:</h1>
+	<h1>Search eduroam provider</h1>
 	<form method="GET" action="./">
 	<?php foreach($_GET as $key => $value) if ($key !== 'inst_search') {
 		echo '<input type="hidden" name="' . o($key) . '" value="' . o($value) . '">';
 	} ?>
-	<p><input type="search" class="form-control input-lg" name="inst_search" id="cat-inst-search" value="<?= o($_GET['inst_search']) ?>" placeholder="Institute of …" autofocus></p>
+	<p><input type="search" class="form-control input-lg" name="inst_search" id="cat-inst-search" value="<?= o($_GET['inst_search']) ?>" placeholder="Start typing to find your eduroam provider" autofocus></p>
 	</form>
 </div>
 </div>
 <div class="row">
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 cat-institution-select">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<ul class="cat-inst-action" style="text-align: right">
 		<?php if (!isset($_GET['geo'])) { ?>
 		<li class="pull-left" style="display:none"><a href="javascript:cat_geolocate()">Show institutions close to my current location</a></li>

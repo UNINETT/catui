@@ -1,5 +1,6 @@
 .cat-institution-select {
-	max-width:82em;
+	margin: 3em 0;
+	text-align: center;
 }
 
 .insts, .cat-inst-action {
