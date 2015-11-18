@@ -18,11 +18,11 @@
 			<ul class="nav navbar-nav">
 				<li><a href="/">Connect</a></li>
 				<li><a href="#">About</a></li>
-				<li><a href="#">Legal</a></li>
+				<li><a href="https://cat.eduroam.org/tou.php">Legal</a></li>
 				<li><a href="#">FAQ</a></li>
 			</ul>
       <ul class="nav navbar-nav navbar-right">
-				<li><a href="#">Develop</a></li>
+				<li><a href="/develop/">Develop</a></li>
         <li><a href="https://cat.eduroam.org/admin/">Admin</a></li>
       </ul>
 		</div><!-- /.navbar-collapse -->
