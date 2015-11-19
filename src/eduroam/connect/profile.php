@@ -283,4 +283,18 @@ class Profile {
 		return new IdentityProvider($this->cat, $this->idpID, $this->lang);
 	}
 
+	/**
+	 * Determines whether a redirect is set for this profile.
+	 *
+	 * @return boolean Profile has a redirect set
+	 */
+	public function isRedirect() {
+		foreach($this->getDevices() as $device) {
+			if (!$device->isProfileRedirect()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

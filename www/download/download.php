@@ -13,12 +13,17 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <ol class="breadcrumb">
 	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">eduroam</a></li>
 <?php if ($canListProfiles) { ?>
+<?php if (!$profile->isRedirect()) { ?>
 	<li><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>"><?= o($idp->getDisplay()) ?></a></li>
+<?php } ?>
 <?php } elseif ($idp->getDisplay() != $profile->getDisplay()) { ?>
 	<li><?= o($idp->getDisplay()) ?></li>
-<?php } ?>
+<?php } if (!$profile->isRedirect()) { ?>
 	<li><a href="<?= o(makeQueryString(['os' => ''])) ?>"><?= o($profile->getDisplay()) ?></a></li>
 	<li class="active"><?= o($device->getDisplay()) ?></li>
+<?php } else { ?>
+	<li class="active"><?= o($idp->getDisplay()) ?></li>
+<?php } ?>
 </ol>
 
 <div class="container">
@@ -57,12 +62,15 @@ You will be redirected to <a href="<?= o($device->getRedirect()) ?>"><?= o($devi
 <p><?= o($device->getDeviceCustomtext()); ?></p>
 <?php } ?>
 
+<?php if (!$profile->isRedirect() || $canListProfiles) { ?>
 <ul class="cat-alt-download">
+<?php if (!$profile->isRedirect()) { ?>
 <li><a href="<?= o(makeQueryString(['os' => ''])) ?>">Different operating system</a></li>
-<?php if ($canListProfiles) { ?>
+<?php } if ($canListProfiles) { ?>
 <li><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>">Different profile</a></li>
 <?php } ?>
 </ul>
+<?php } ?>
 </main>
 </div>
 </div>

@@ -150,7 +150,7 @@ class Device {
 	 * Get the friendly name for this device.
 	 *
 	 * This will typically be the operating system that runs on this device.
-	 * There are some special cases, such as 'EAP config' and 'Redirect', where
+	 * There are some special cases, such as 'EAP config' and 'External', where
 	 * the first is a special kind of configuration profile provided by CAT and
 	 * the latter is an internal method for handling profiles that only provide
 	 * a redirect.
@@ -159,8 +159,8 @@ class Device {
 	 */
 	public function getDisplay() {
 		$raw = $this->getRaw();
-		if (!isset($raw->display) && $raw->redirect) {
-			return 'Redirect';
+		if ($this->isProfileRedirect()) {
+			return 'External';
 		}
 		return $raw->display;
 	}
@@ -268,6 +268,17 @@ class Device {
 	 */
 	public function isRedirect() {
 		return !!$this->getRaw()->redirect;
+	}
+
+	/**
+	 * Determines whether this device's download link is a redirect set by the
+	 * profile that this device is a part of.
+	 *
+	 * @return boolean Redirect is set by the profile
+	 */
+	public function isProfileRedirect() {
+		$raw = $this->getRaw();
+		return $this->deviceID === '0' && !isset($raw->display) && $raw->redirect;
 	}
 
 }
