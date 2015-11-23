@@ -72,6 +72,12 @@ You will be redirected to <a href="<?= o($device->getRedirect()) ?>"><?= o($devi
 </ul>
 <?php } ?>
 </main>
+<div class="col-xs-12 col-sm-pull-4 col-sm-8 col-md-pull-3 col-md-9 col-lg-pull-3 col-lg-9">
+<h3><?= o($device->getDisplay()) ?> Instructions</h3>
+<?php if ($device->getDeviceInfo()) { ?>
+<?= $device->getDeviceInfo(); ?>
+<?php } ?>
+</div>
 </div>
 </div>
 

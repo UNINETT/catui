@@ -56,6 +56,7 @@ class CAT {
 		curl_setopt($this->ch, CURLOPT_HEADER, 0);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($this->ch, CURLOPT_URL, $url);
+		curl_setopt($this->ch, CURLOPT_FAILONERROR, TRUE);
 		curl_setopt($this->ch, CURLOPT_HTTPHEADER, [
 			'Accept: ' . $accept,
 		]);
@@ -84,11 +85,65 @@ class CAT {
 	 *
 	 * @param string[] $query Parameters for the CAT API, needs at least action
 	 * @param string $lang Desired language for friendly strings
+	 *
+	 * @return stdClass|array JSON-decoded answer from CAT API
 	 */
 	private function catJSONQuery($query, $lang = '') {
+		$rawResult = $this->executeCatQuery($query, $lang, 'application/json');
+		$result = json_decode($rawResult);
+		if ($result) {
+			return $result;
+		} else {
+			$this->flushCatQuery($query, $lang, 'application/json');
+			$rawResult = $this->executeCatQuery($query, $lang, 'application/json');
+			$result = json_decode($rawResult);
+			if ($result) {
+				return $result;
+			}
+		}
+		throw new DomainException('Illegal result from ' . $url . ': ' . $rawResult);
+	}
+
+	/**
+	 * Get raw answer from CAT API.
+	 *
+	 * @param string[] $query Parameters for the CAT API, needs at least action
+	 * @param string $lang Desired language for friendly strings
+	 * @param string $accept Accepted content type for answer (request is always form-encoded)
+	 *
+	 * @return string Raw answer from CAT query
+	 */
+	private function executeCatQuery($query, $lang = '', $accept = 'application/json') {
 		if ($lang) {
 			$query['lang'] = $lang;
 		}
+		$file = $this->getCatQueryFilename($query, $lang, $accept);
+		$useLocal = file_exists($file) && filemtime($file) > time() - $this->cache;
+		$url = $this->getBase() . '?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+		if ($useLocal) {
+			$result = file_get_contents($file);
+		} else {
+			$result = $this->file_get_contents_curl($url, $accept);
+			file_put_contents($file, $result);
+		}
+		if ($result) {
+			return $result;
+		} else {
+			$this->flushCatQuery($query, $lang, $accept);
+			throw new DomainException('Empty result from ' . $url);
+		}
+	}
+
+	/**
+	 * Get the filename for a cached CAT API response.
+	 *
+	 * @param string[] $query Parameters for the CAT API, needs at least action
+	 * @param string $lang Desired language for friendly strings
+	 * @param string $accept Accepted content type for answer (request is always form-encoded)
+	 *
+	 * @return string Full path to the cached CAT API response (may not exist yet)
+	 */
+	private function getCatQueryFilename($query, $lang = '', $accept = 'application/json') {
 		$hash = md5(serialize($query)) . '-' . md5($this->getBase());
 		$file = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'eduroam-';
 		if (isset($query['action'])) {
@@ -101,27 +156,23 @@ class CAT {
 			$file .= $query['profile'] . '-';
 		}
 		$file .= $hash;
-		$useLocal = file_exists($file) && filemtime($file) > time() - $this->cache;
-		$url = $this->getBase() . '?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
-		$rawResult = $useLocal
-			? file_get_contents($file)
-			: $rawResult = $this->file_get_contents_curl($url)
-			;
-		$result = json_decode($rawResult);
-		if ($result) {
-			// Don't write if we have it from cache
-			// otherwise the cache counter resets
-			if (!$useLocal) {
-				file_put_contents($file, $rawResult);
-			}
-		} elseif ($useLocal) {
-			// The local file is borked, starting over
-			unlink($file);
-			$this->catJSONQuery($query, $lang);
-		} else {
-			throw new DomainException('Illegal result from '.$url.': ' . $rawResult);
-		}
-		return $result;
+		return $file;
+	}
+
+	/**
+	 * Make sure that the answer to the provided query is not cached.
+	 *
+	 * This is done by removing the cache file.
+	 * After this function completes, the next call to #executeCatQuery will
+	 * guaranteed get its result from the server.
+	 *
+	 * @param string[] $query Parameters for the CAT API, needs at least action
+	 * @param string $lang Desired language for friendly strings
+	 * @param string $accept Accepted content type for answer (request is always form-encoded)
+	 */
+	private function flushCatQuery($query, $lang = '', $accept = 'application/json') {
+		$file = $this->getCatQueryFilename($query, $lang, $accept);
+		unlink($file);
 	}
 
 	/**
@@ -198,7 +249,7 @@ class CAT {
 			'action' => 'generateInstaller',
 			'id' => $osName,
 			'profile' => $profileID,
-		])->data;
+		], $lang)->data;
 	}
 
 	/**
@@ -213,7 +264,28 @@ class CAT {
 		return $this->catJSONQuery([
 			'action' => 'listDevices',
 			'id' => $profileID,
-		])->data;
+		], $lang)->data;
+	}
+
+	/**
+	 * Show device information, undocumented CAT feature.
+	 *
+	 * This feature is mentioned on the cat-users mailing list by Tomaz and
+	 * Stefan, and returns CAT-issued HTML messages per device.
+	 *
+	 * The API also asks for a Profile ID, but it doesn't seem like this makes
+	 * any difference in the outcome of the API call.
+	 *
+	 * @param string $osName Name of the operating system as presented in the CAT database (w8, mobileconfig, linux)
+	 * @param int $profileID The ID number of the profile in the CAT database
+	 * @param string $lang Desired language for friendly strings
+	 */
+	public function getDeviceInfo($osName, $profileID, $lang = '') {
+		return $this->executeCatQuery([
+			'action' => 'deviceInfo',
+			'id' => $osName,
+			'profile' => $profileID,
+		], $lang, 'text/html');
 	}
 
 }

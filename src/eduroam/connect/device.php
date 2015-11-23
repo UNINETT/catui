@@ -92,7 +92,10 @@ class Device {
 	 * @var int
 	 */
 	private $deviceID;
-	private $c;
+	/**
+	 * Device info, this is a separate CAT call and thus not in #getRaw()
+	 */
+	private $deviceInfo;
 	/**
 	 * Language flag to use in requests against CAT
 	 * @var string
@@ -227,19 +230,38 @@ class Device {
 	/**
 	 * (undocumented feature)
 	 *
-	 * This appears to be another message the CAT API can return.
+	 * This is another message the CAT API can return.
 	 * As opposed to other custom texts, the message contains HTML code.
-	 * This documentation is based on reverse engineering and may change when
+	 * This documentation is based on reverse engineering and may improve when
 	 * better documentation becomes available.
 	 *
 	 * @deprecated
 	 *
-	 * @return string HTML message
+	 * @return string HTML message, without enclosing <p>
 	 */
 	public function getMessage() {
 		if (isset($this->getRaw()->message)) {
 			return $this->getRaw()->message;
 		}
+	}
+
+	/**
+	 * (undocumented feature)
+	 *
+	 * This is another message the CAT API can return.
+	 * As opposed to other custom texts, the message contains HTML code.
+	 * This documentation is based on reverse engineering and may improve when
+	 * better documentation becomes available.
+	 *
+	 * @deprecated
+	 *
+	 * @return string HTML message, with enclosing <p>
+	 */
+	public function getDeviceInfo() {
+		if (!isset($this->deviceInfo)) {
+			$this->deviceInfo = $this->cat->getDeviceInfo($this->getDeviceID(), $this->getProfileID());
+		}
+		return $this->deviceInfo;
 	}
 
 	/**
