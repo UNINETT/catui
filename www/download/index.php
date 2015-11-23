@@ -19,23 +19,24 @@ $profiles = \Eduroam\Connect\Profile::getProfilesByIdPEntityID($cat, $_GET['idp'
 $canListProfiles = count($profiles) > 1;
 
 $oses = [
-	'w10' => ['/Windows NT 10[._]0+/'],
-	'w8' => ['/Windows NT 6[._][23]/'],
-	'w7' => ['/Windows NT 6[._]1/'],
 	'vista' => ['/Windows NT 6[._]0/'],
+	'w7' => ['/Windows NT 6[._]1/'],
+	'w8' => ['/Windows NT 6[._][23]/'],
+	'w10' => ['/Windows NT 10[._]0+/'],
 	'mobileconfig-56' => ['/\((iPad|iPhone|iPod);.*OS [56]_/'],
-	'mobileconfig' => ['/\((iPad|iPhone|iPod);.*OS [7-9]_/'],
-	'apple_el_cap' => ['/Mac OS X 10[._]11/'],
-	'apple_yos' => ['/Mac OS X 10[._]10/'],
-	'apple_mav' => ['/Mac OS X 10[._]9/'],
-	'apple_m_lion' => ['/Mac OS X 10[._]8/'],
 	'apple_lion' => ['/Mac OS X 10[._]7/'],
+	'apple_m_lion' => ['/Mac OS X 10[._]8/'],
+	'apple_mav' => ['/Mac OS X 10[._]9/'],
+	'apple_yos' => ['/Mac OS X 10[._]10/'],
+	'apple_el_cap' => ['/Mac OS X 10[._]11/', '/Mac OS X/'],
+	'mobileconfig' => ['/\((iPad|iPhone|iPod);.*OS [7-9]_/'],
 	'linux' => ['/Linux(?!.*Android)/'],
 	'chromeos' => ['/CrOS/'],
-	'android_lollipop' => ['/Android 5[._][0-9]/'],
-	'android_kitkat' => ['/Android 4[._][4-9]/'],
 	'android43' => ['/Android 4[._]3/'],
-	0 => ['/.*/'],
+	'android_kitkat' => ['/Android 4[._][4-9]/'],
+	'android_lollipop' => ['/Android 5[._][0-9]/'],
+	'android_marshmallow' => ['/Android 6[._][0-9]/', '/Android/'],
+	0 => ['//'],
 ];
 
 $devices = $profile->getDevices();
@@ -57,10 +58,7 @@ if (!isset($_GET['os'])) {
 if (isset($_GET['os']) && array_key_exists($_GET['os'], $devices)) {
 	$os = $_GET['os'];
 	$device = $profile->getDevices()[$_GET['os']];
-	$file = __DIR__ . DIRECTORY_SEPARATOR . 'download-' . $os . '.php';
-	if (!file_exists($file)) {
-		$file = __DIR__ . DIRECTORY_SEPARATOR . 'download.php';
-	}
+	$file = __DIR__ . DIRECTORY_SEPARATOR . 'download.php';
 } else {
 	$file = __DIR__ . DIRECTORY_SEPARATOR . 'list.php';
 }
