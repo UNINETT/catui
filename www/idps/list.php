@@ -86,7 +86,7 @@ function cat_geolocate() {
 	}
 	function redirect_position(position) {
 		geo = position.coords.latitude + ',' + position.coords.longitude;
-		window.location = <?= json_encode($geoQueryString) ?> + geo;
+		window.location = <?= json_encode($geoQueryString, JSON_HEX_TAG) ?> + geo;
 	}
 	navigator.geolocation.getCurrentPosition(redirect_position);
 };
