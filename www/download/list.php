@@ -16,12 +16,9 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 	<li class="active"><?= o($profile->getDisplay()) ?></li>
 </ol>
 
-<!-- <pre><?= o(json_encode($idp->getRaw())); ?></pre> -->
-<!-- <pre><?= o(json_encode($profile->getRaw())); ?></pre> -->
-
 <div class="container">
 <div class="row">
-<div class="col-xs-12 col-sm-12 col-md-push-9 col-md-3 col-lg-push-9 col-lg-3">
+<div class="col-xs-12 col-sm-12 col-md-push-9 col-md-3 col-lg-push-9 col-lg-3 support">
 <?php include 'support.php'; ?>
 </div>
 
@@ -38,7 +35,6 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <h3><?= o($group) ?></h3>
 <ul>
 <?php foreach($devices as $device) { ?>
-<!-- <li><pre><?= o(json_encode($device->getRaw())); ?></pre></li> -->
 <li>
 <a href="<?= o(makeQueryString(['os' => $device->getDeviceID()])) ?>">
 <?= o($device->getDisplay()); ?>

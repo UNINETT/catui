@@ -28,11 +28,8 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 
 <div class="container">
 <div class="row">
-<div class="col-xs-12 col-sm-push-8 col-sm-4 col-md-push-9 col-md-3 col-lg-push-9 col-lg-3">
-<?php include 'support.php'; ?>
-</div>
 
-<main class="col-xs-12 col-sm-pull-4 col-sm-8 col-md-pull-3 col-md-9 col-lg-pull-3 col-lg-9">
+<main class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
 <h2><?= o($profile->getDisplay()) ?>
 <?php if ($profile->getDisplay() != $idp->getDisplay()) { ?>
 
@@ -49,7 +46,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <p class="cat-download">Download your eduroam profile<br>
 <a class="<?= o($bootstrapStyle) ?> <?= o($catStyle) ?>" href="<?= o($device->getDownloadLink()) ?>"><big><big>
 <strong><?= o($profile->getDisplay()) ?></strong><br>
-<small><small class="cat-device-id"><?= o($device->getDisplay()) ?></small></small>
+<small><small><small class="cat-device-id"><?= o($device->getDisplay()) ?></small></small></small>
 </big></big></a>
 </p>
 <?php if ($device->isRedirect()) { ?>
@@ -72,11 +69,19 @@ You will be redirected to <a href="<?= o($device->getRedirect()) ?>"><?= o($devi
 </ul>
 <?php } ?>
 
+<?php if (!$profile->isRedirect()) { ?>
+<hr>
 <h3><?= o($device->getDisplay()) ?> Instructions</h3>
 <?php if ($device->getDeviceInfo()) { ?>
 <?= $device->getDeviceInfo(); ?>
 <?php } ?>
+<?php } ?>
 </main>
+
+<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+<?php include 'support.php'; ?>
+</div>
+
 </div>
 </div>
 

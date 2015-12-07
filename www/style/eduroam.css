@@ -1,17 +1,51 @@
+.insts li {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.insts li a {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	width: 100%;
+}
+
 .cat-institution-select {
-	margin: 3em 0;
+	margin: 3em 0 0 0;
+	padding: 0 !important;
 	text-align: center;
 }
 
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	margin-top: 0 !important;
+}
+
 .insts {
-	line-height: 4em !important;
+	line-height: 4em;
 }
 .insts, .cat-inst-action, .cat-alt-download {
 	padding: 0;
 }
 .insts li, .cat-inst-action li, .cat-alt-download li {
 	display: inline-block;
+	max-width: 100%;
 }
+@media screen and (max-width: 767px) {
+	.insts li {
+		width: 100%;
+		border-top: 1px solid #eee;
+	}
+	.insts li:last-child {
+		border-bottom: 1px solid #eee;
+	}
+	.insts {
+		line-height: 2em;
+	}
+	.cat-institution-select {
+		margin: 0;
+	}
+}
+
 .cat-alt-download li {
 	padding-right: 2em;
 }
@@ -24,7 +58,6 @@ ul.cat-profiles li {
 	display: inline;
 }
 .cat-download a {
-	min-width: 20em;
 }
 
 nav {
@@ -35,6 +68,13 @@ nav {
 }
 .breadcrumb {
 	margin-top: 50px;
+}
+.breadcrumb li {
+	max-width: 17em;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 .cat-support-contact span {
 	display: block;

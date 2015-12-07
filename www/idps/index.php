@@ -9,6 +9,7 @@ if (!isset($_GET['inst_search'])) {
 
 $lat = null;
 $lon = null;
+$geo = null;
 
 if (isset($_GET['geo'])) {
 	$latlon = explode(',', $_GET['geo']);
@@ -34,7 +35,13 @@ $cat = new \Eduroam\CAT\CAT();
 
 $idps = \Eduroam\Connect\IdentityProvider::getIdentityProvidersByCountry($cat, $_GET['c']);
 if (isset($_GET['inst_search']) && $_GET['inst_search']) {
-	$idps = array_filter($idps, function($idp){return strpos(strtolower($idp->getTitle()), strtolower($_GET['inst_search'])) !== false;});
+	$filterIdps = array_filter($idps, function($idp){
+		return $idp->hasSearchMatch($_GET['inst_search']);
+	});
+	if (count($filterIdps) === 1) {
+		header('Location: /profiles/?idp=' . rawurlencode(reset($filterIdps)->getEntityID()));
+		exit;
+	}
 }
 $maxDistance = 0;
 $minDistance = INF;
@@ -69,9 +76,5 @@ $getMinusGeo = $_GET;
 unset($getMinusGeo['geo']); // remove so next will have it at the end
 $getMinusGeo['geo'] = '';
 $geoQueryString = '?' . http_build_query($getMinusGeo);
-
-if (count($idps) === 1) {
-	header('Location: /profiles/?idp=' . rawurlencode(reset($idps)->getEntityID()));
-}
 
 require 'list.php';

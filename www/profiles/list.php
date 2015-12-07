@@ -8,11 +8,9 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 	<li class="active"><?= o($idp->getDisplay()) ?></li>
 </ol>
 
-<!-- <pre><?= o(json_encode($idp->getRaw(), JSON_PRETTY_PRINT)); ?></pre> -->
-
 <div class="container">
 <div class="row">
-<div class="col-xs-12 col-sm-push-8 col-sm-4 col-md-push-9 col-md-3 col-lg-push-9 col-lg-3">
+<div class="col-xs-12 col-sm-push-8 col-sm-4 col-md-push-9 col-md-3 col-lg-push-9 col-lg-3 support">
 <?php include 'support.php'; ?>
 </div>
 
@@ -21,7 +19,6 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <p>Select the user group</p>
 <ul class="cat-profiles">
 <?php foreach($profiles as $profile) { ?>
-<!-- <li><pre><?= o(json_encode($profile->getRawAttributes(), JSON_PRETTY_PRINT)); ?></pre> -->
 <li>
 <a href="<?= o('/download/?' . build_download_query($profile)) ?>" class="btn btn-primary">
 <?= $profile->getDisplay() ?>

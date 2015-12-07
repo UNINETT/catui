@@ -1,4 +1,7 @@
-<?php namespace Eduroam\Connect;
+<?php declare(strict_types=1);
+namespace Eduroam\Connect;
+
+use \stdClass;
 
 use \Eduroam\CAT\CAT;
 
@@ -52,7 +55,7 @@ class IdentityProvider {
 	 * @param CAT $cat CAT instance
 	 * @param string $lang Language
 	 */
-	private static function loadAllIdentityProviders(CAT $cat, $lang = '') {
+	private static function loadAllIdentityProviders(CAT $cat, string $lang = '') {
 		if (!isset(static::$allIdentityProviders[$cat->getBase()][$lang])) {
 			$idps = $cat->listAllIdentityProviders($lang);
 			foreach($idps as $idp) {
@@ -70,7 +73,7 @@ class IdentityProvider {
 	 *
 	 * @return IdentityProvider[]
 	 */
-	public static function getAllIdentityProviders(CAT $cat, $lang = '') {
+	public static function getAllIdentityProviders(CAT $cat, string $lang = ''): array {
 		static::loadAllIdentityProviders($cat, $lang);
 		$idps = [];
 		foreach(static::$allIdentityProviders[$cat->getBase()][$lang] as $idpData) {
@@ -88,7 +91,7 @@ class IdentityProvider {
 	 * @param string $c Country, usually two uppercase letters
 	 * @param string $lang Language
 	 */
-	private static function loadIdentityProvidersByCountry(CAT $cat, $c, $lang = '') {
+	private static function loadIdentityProvidersByCountry(CAT $cat, string $c, string $lang = '') {
 		if (!isset(static::$identityProvidersByCountry[$cat->getBase()][$c][$lang])) {
 			$idps = $cat->listIdentityProviders($c, $lang);
 			foreach($idps as $idp) {
@@ -105,12 +108,14 @@ class IdentityProvider {
 	 * @param CAT $cat CAT instance
 	 * @param string $c Country, usually two uppercase letters
 	 * @param string $lang Language
+	 *
+	 * @return IdentityProvider[]
 	 */
-	public static function getIdentityProvidersByCountry(CAT $cat, $c, $lang = '') {
+	public static function getIdentityProvidersByCountry(CAT $cat, string $c, string $lang = ''): array {
 		static::loadIdentityProvidersByCountry($cat, $c, $lang);
 		$idps = [];
 		foreach(static::$identityProvidersByCountry[$cat->getBase()][$c][$lang] as $idpData) {
-			$idps[$idpData->id] = new IdentityProvider($cat, $idpData->id, $lang);
+			$idps[$idpData->id] = new IdentityProvider($cat, (int)$idpData->id, $lang);
 			$idps[$idpData->id]->c = $c;
 		}
 		return $idps;
@@ -147,7 +152,7 @@ class IdentityProvider {
 	 * @param int $id Entity ID
 	 * @param string $lang Language
 	 */
-	public function __construct(CAT $cat, $id, $lang = '') {
+	public function __construct(CAT $cat, int $id, string $lang = '') {
 		$this->cat = $cat;
 		$this->id = $id;
 		$this->lang = $lang;
@@ -160,7 +165,7 @@ class IdentityProvider {
 	 *
 	 * @return stdClass
 	 */
-	public function getRaw() {
+	public function getRaw(): stdClass {
 		$this->loadAllIdentityProviders($this->cat, $this->lang);
 		return static::$allIdentityProviders[$this->cat->getBase()][$this->lang][$this->id];
 	}
@@ -170,7 +175,7 @@ class IdentityProvider {
 	 *
 	 * @return int Entity ID
 	 */
-	public function getEntityID() {
+	public function getEntityID(): int {
 		return $this->id;
 	}
 
@@ -180,7 +185,7 @@ class IdentityProvider {
 	 *
 	 * @return string Country code
 	 */
-	public function getCountry() {
+	public function getCountry(): string {
 		if (isset($this->c)) {
 			return $this->c;
 		}
@@ -193,17 +198,17 @@ class IdentityProvider {
 	 * This ID is usually the same as Entity ID if an icon is set,
 	 * or <code>NULL</code> if no icon is set.
 	 *
-	 * @return int Icon ID
+	 * @return int|null Icon ID
 	 */
 	public function getIconID() {
-		return isset($this->getRaw()->icon) ? $this->getRaw()->icon : null;
+		return $this->getRaw()->icon ?? null;
 	}
 
 	/**
 	 * Get the icon URL on CAT for this institution.
 	 * If the institution has no icon, return NULL instead.
 	 *
-	 * @return string URL to icon, for hotlinking from CAT
+	 * @return string|null URL to icon, for hotlinking from CAT
 	 */
 	public function getIconUrl() {
 		$icon = $this->getIconID();
@@ -221,7 +226,7 @@ class IdentityProvider {
 	 *
 	 * @return string The title
 	 */
-	public function getDisplay() {
+	public function getDisplay(): string {
 		return $this->getTitle();
 	}
 
@@ -231,7 +236,7 @@ class IdentityProvider {
 	 *
 	 * @return string The title
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		if (isset($this->c)
 			&& !isset($this->getRaw()->title)
 		) {
@@ -246,11 +251,19 @@ class IdentityProvider {
 	 * This function returns a list of objects that have <code>lat</code> and <code>lon</code> properties.
 	 * If no geolocation information is known, the array is empty.
 	 *
-	 * @return stdClass[]
+	 * @return stdClass[] Objects with lat and lon
 	 */
-	public function getGeo() {
+	public function getGeo(): array {
 		$idp = $this->getRaw();
-		return isset($idp->geo) ? $idp->geo : [];
+		foreach($idp->geo ?? [] as $geo) {
+			if (is_numeric($geo->lat) && is_numeric($geo->lon)) {
+				$geo->lat = (float)$geo->lat;
+				$geo->lon = (float)$geo->lon;
+			} else {
+				return null;
+			}
+		}
+		return $idp->geo ?? [];
 	}
 
 	/**
@@ -259,11 +272,12 @@ class IdentityProvider {
 	 * if the institution doesn't have a location, the array will contain
 	 * one infinity value.  This makes it easier to call #min() and #max().
 	 *
-	 * @param int $lat Latitude
-	 * @param int $lon Longitude
+	 * @param float $lat Latitude
+	 * @param float $lon Longitude
+	 *
 	 * @return float[]
 	 */
-	public function getDistanceFrom($lat, $lon) {
+	public function getDistanceFrom(float $lat, float $lon): array {
 		$results = [];
 		$geos = $this->getGeo();
 		if (!$geos) {
@@ -289,8 +303,22 @@ class IdentityProvider {
 	 *
 	 * @return Profile[]
 	 */
-	public function getProfiles() {
+	public function getProfiles(): array {
 		return Profile::getProfilesByIdP($this->cat, $this, $this->lang);
+	}
+
+	/**
+	 * Determine if this identity provider is matched by a given search string
+	 *
+	 * @param string $search The search string
+	 *
+	 * @return bool The identity provider matches the search string
+	 */
+	public function hasSearchMatch(string $search): bool {
+		$keywords = preg_split('/[\s,]+/', strtolower(trim($search)));
+		return array_reduce($keywords, function(bool $carry, string $item): bool {
+			return $carry && (!$item || strpos(strtolower($this->getTitle()), $item) !== false);
+		}, true);
 	}
 
 }

@@ -1,4 +1,7 @@
-<?php namespace Eduroam\Connect;
+<?php declare(strict_types=1);
+namespace Eduroam\Connect;
+
+use \stdClass;
 
 use \Eduroam\CAT\CAT;
 
@@ -9,6 +12,30 @@ use \Eduroam\CAT\CAT;
  * to configure eduroam and will typically be available for multiple devices.
  */
 class Profile {
+
+	/**
+	 * Mapping of CAT device ID to user agent
+	 */
+	const USER_AGENTS = [
+		'vista' => ['/Windows NT 6[._]0/'],
+		'w7' => ['/Windows NT 6[._]1/'],
+		'w8' => ['/Windows NT 6[._][23]/'],
+		'w10' => ['/Windows NT 10[._]0+/', '/Windows NT/'],
+		'mobileconfig-56' => ['/\((iPad|iPhone|iPod);.*OS [56]_/'],
+		'apple_lion' => ['/Mac OS X 10[._]7/'],
+		'apple_m_lion' => ['/Mac OS X 10[._]8/'],
+		'apple_mav' => ['/Mac OS X 10[._]9/'],
+		'apple_yos' => ['/Mac OS X 10[._]10/'],
+		'apple_el_cap' => ['/Mac OS X 10[._]11/', '/Mac OS X/'],
+		'mobileconfig' => ['/\((iPad|iPhone|iPod);.*OS /'],
+		'linux' => ['/Linux(?!.*Android)/'],
+		'chromeos' => ['/CrOS/'],
+		'android43' => ['/Android 4[._]3/'],
+		'android_kitkat' => ['/Android 4[._][4-9]/'],
+		'android_lollipop' => ['/Android 5[._][0-9]/'],
+		'android_marshmallow' => ['/Android 6[._][0-9]/', '/Android/'],
+		0 => ['//'],
+	];
 
 	/**
 	 * List of all profiles by CAT base, identity provider and language.
@@ -43,7 +70,7 @@ class Profile {
 	 * @param int $idpID Identity provider ID
 	 * @param string $lang Language
 	 */
-	private static function loadProfilesByIdPEntityID(CAT $cat, $idpID, $lang = '') {
+	private static function loadProfilesByIdPEntityID(CAT $cat, int $idpID, string $lang = '') {
 		if (!isset(static::$profiles[$cat->getBase()][$idpID][$lang])) {
 			foreach($cat->listProfiles($idpID, $lang) as $profile) {
 				static::$profiles[$cat->getBase()][$idpID][$lang][$profile->id] = $profile;
@@ -60,11 +87,11 @@ class Profile {
 	 *
 	 * @return Profile[]
 	 */
-	public static function getProfilesByIdPEntityID(CAT $cat, $idpID, $lang = '') {
+	public static function getProfilesByIdPEntityID(CAT $cat, int $idpID, string $lang = ''): array {
 		static::loadProfilesByIdPEntityID($cat, $idpID, $lang);
 		$profiles = [];
 		foreach(static::$profiles[$cat->getBase()][$idpID][$lang] as $profile) {
-			$profiles[$profile->id] = new Profile($cat, $idpID, $profile->id, $lang);
+			$profiles[$profile->id] = new Profile($cat, $idpID, (int)$profile->id, $lang);
 		}
 		return $profiles;
 	}
@@ -76,7 +103,7 @@ class Profile {
 	 * @param int $profileID Profile ID
 	 * @param string $lang Language
 	 */
-	private static function loadProfileAttributesByID(CAT $cat, $profileID, $lang = '') {
+	private static function loadProfileAttributesByID(CAT $cat, int $profileID, string $lang = '') {
 		if (!isset(static::$profileAttributes[$cat->getBase()][$profileID][$lang])) {
 			static::$profileAttributes[$cat->getBase()][$profileID][$lang] = $cat->profileAttributes($profileID, $lang);
 		}
@@ -94,11 +121,10 @@ class Profile {
 	 *
 	 * @return stdClass[]
 	 */
-	public static function getRawDevicesByProfileID(CAT $cat, $profileID, $lang = '') {
+	public static function getRawDevicesByProfileID(CAT $cat, int $profileID, string $lang = ''): array {
 		if (isset(static::$profileAttributes[$cat->getBase()][$profileID][$lang]->devices)) {
 			return static::$profileAttributes[$cat->getBase()][$profileID][$lang]->devices;
 		}
-		return null;
 	}
 
 	/**
@@ -127,9 +153,10 @@ class Profile {
 	 *
 	 * @param CAT $cat CAT instance
 	 * @param int $idpID Identity provider ID
+	 * @param int $profileID Profile ID
 	 * @param string $lang Language
 	 */
-	public function __construct(CAT $cat, $idpID, $profileID, $lang = '') {
+	public function __construct(CAT $cat, int $idpID, int $profileID, string $lang = '') {
 		$this->cat = $cat;
 		$this->idpID = $idpID;
 		$this->profileID = $profileID;
@@ -143,7 +170,7 @@ class Profile {
 	 *
 	 * @return stdClass
 	 */
-	public function getRaw() {
+	public function getRaw(): stdClass {
 		self::loadProfileAttributesByID($this->cat, $this->profileID, $this->lang);
 		return static::$profileAttributes[$this->cat->getBase()][$this->profileID][$this->lang];
 	}
@@ -156,7 +183,7 @@ class Profile {
 	 *
 	 * @return stdClass
 	 */
-	public function getRawAttributes() {
+	public function getRawAttributes(): stdClass {
 		self::loadProfilesByIdPEntityID($this->cat, $this->idpID, $this->lang);
 		return static::$profiles[$this->cat->getBase()][$this->idpID][$this->lang][$this->profileID];
 	}
@@ -166,7 +193,7 @@ class Profile {
 	 *
 	 * @return int The profile ID
 	 */
-	public function getProfileID() {
+	public function getProfileID(): int {
 		return $this->profileID;
 	}
 
@@ -175,7 +202,7 @@ class Profile {
 	 *
 	 * @return int The identity provider ID
 	 */
-	public function getIdpID() {
+	public function getIdpID(): int {
 		return $this->idpID;
 	}
 
@@ -184,7 +211,7 @@ class Profile {
 	 *
 	 * @return string The friendly name of this profile
 	 */
-	public function getDisplay() {
+	public function getDisplay(): string {
 		static::loadProfilesByIdPEntityID($this->cat, $this->idpID, $this->lang);
 		if (!static::$profiles[$this->cat->getBase()][$this->idpID][$this->lang][$this->profileID]->display) {
 			return $this->getIdentityProvider()->getDisplay();
@@ -201,7 +228,7 @@ class Profile {
 	/**
 	 * Get the support e-mail address for this profile.
 	 *
-	 * @return string support e-mail address for this profile
+	 * @return string|null support e-mail address for this profile
 	 */
 	public function getLocalEmail() {
 		$raw = $this->getRaw();
@@ -213,7 +240,7 @@ class Profile {
 	/**
 	 * Get the support telephone number address for this profile.
 	 *
-	 * @return string support telephone number address for this profile
+	 * @return string|null support telephone number address for this profile
 	 */
 	public function getLocalPhone() {
 		$raw = $this->getRaw();
@@ -225,7 +252,7 @@ class Profile {
 	/**
 	 * Get the support URL address for this profile.
 	 *
-	 * @return string support URL address for this profile
+	 * @return string|null support URL address for this profile
 	 */
 	public function getLocalUrl() {
 		$raw = $this->getRaw();
@@ -238,7 +265,7 @@ class Profile {
 	 * Get the description for this profile in plain unformatted text.
 	 * This is displayed on the download page.
 	 *
-	 * @return string support e-mail address for this profile
+	 * @return string|null support e-mail address for this profile
 	 */
 	public function getDescription() {
 		$raw = $this->getRaw();
@@ -252,7 +279,7 @@ class Profile {
 	 *
 	 * @return Device[]
 	 */
-	public function getDevices() {
+	public function getDevices(): array {
 		static::loadProfileAttributesByID($this->cat, $this->profileID);
 		$devices = [];
 		foreach($this->getRaw()->devices as $device) {
@@ -267,9 +294,9 @@ class Profile {
 	 * A profile is considered supported if one of the following is available:
 	 * support email, support phone, local url.
 	 *
-	 * @return boolean This profile is supported
+	 * @return bool This profile is supported
 	 */
-	public function hasSupport() {
+	public function hasSupport(): bool {
 		return $this->getLocalEmail() || $this->getLocalPhone() || $this->getLocalUrl();
 	}
 
@@ -279,22 +306,45 @@ class Profile {
 	 *
 	 * @return IdentityProvider
 	 */
-	public function getIdentityProvider() {
+	public function getIdentityProvider(): IdentityProvider {
 		return new IdentityProvider($this->cat, $this->idpID, $this->lang);
 	}
 
 	/**
 	 * Determines whether a redirect is set for this profile.
 	 *
-	 * @return boolean Profile has a redirect set
+	 * @return bool Profile has a redirect set
 	 */
-	public function isRedirect() {
+	public function isRedirect(): bool {
 		foreach($this->getDevices() as $device) {
 			if (!$device->isProfileRedirect()) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Guess the device ID based of the user agent string.
+	 *
+	 * The function can optionally limit itself to given deviceIDs,
+	 * which is useful if a profile is not available for all devices.
+	 *
+	 * @param string $userAgent User agent to guess the device ID for
+	 * @param string[] $deviceIDs Available device IDs to choose from, null for all
+	 *
+	 * @return string|null The guessed device ID
+	 */
+	public function guessDeviceID(string $userAgent, array $deviceIDs = null) {
+		$deviceIDs = $deviceIDs ?? array_keys(static::USER_AGENTS);
+		foreach($deviceIDs as $deviceID) {
+			foreach(static::USER_AGENTS[$deviceID] ?? [] as $regex) {
+				if (preg_match($regex, $userAgent) === 1) {
+					return $deviceID;
+				}
+			}
+		}
+		return null;
 	}
 
 }

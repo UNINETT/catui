@@ -1,4 +1,4 @@
-<hr style="display:none">
+<hr class="hidden-xs hidden-sm hidden-md hidden-lg">
 
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
@@ -30,12 +30,12 @@
 </nav>
 
 <div class="container">
-<hr>
+<hr class="hidden-xs">
 </div>
 
 <footer class="legal">
 This web page is licensed under the terms of the GNU Affero General Public License.<br>
-The profiles are licensed under the CAT ToS
+The profiles are licensed under the CAT ToS.
 </footer>
 
 <script src="../style/jquery-2.1.4.min.js" crossorigin="anonymous"></script>
