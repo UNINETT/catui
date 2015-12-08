@@ -23,13 +23,13 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 </div>
 
 <main class="col-xs-12 col-sm-12 col-md-pull-3 col-md-9 col-lg-pull-3 col-lg-9">
-<h2><?= o($profile->getDisplay()) ?>
+<h1><?= o($profile->getDisplay()) ?>
 <?php if ($profile->getDisplay() != $idp->getDisplay()) { ?>
 
 <small><?= o($idp->getDisplay()) ?></small>
 <?php } ?>
-</h2>
-<p>Choose an installer to download</p>
+</h1>
+<h2 class="h5">Choose an installer to download</h2>
 
 <?php foreach(\Eduroam\Connect\Device::groupDevices($profile->getDevices()) as $group => $devices) { ?>
 <h3><?= o($group) ?></h3>

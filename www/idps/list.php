@@ -90,4 +90,5 @@ function cat_geolocate() {
 
 $('#cat-inst-search').keyup(inst_search);
 $('#cat-inst-search').change(inst_search);
+inst_search();
 </script>

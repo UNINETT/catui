@@ -54,15 +54,16 @@ function url($url) {
 	return $result;
 }
 ?>
-<h1 class="h3"><?= o($idp->getDisplay()) ?></h1>
+<h2 class="h3"><?= o($idp->getDisplay()) ?></h2>
 <?php if (!is_null($idp->getIconID())) { ?>
 <p><img src="<?= o($idp->getIconUrl()) ?>" alt="<?= o($idp->getDisplay()) ?> logo" class="cat-idp-logo">
 <?php } ?>
+<?php if ($profile->getDescription()) { ?>
 <p><?= o($profile->getDescription()) ?>
 
 <hr>
 
-<?php if ($profile->hasSupport()) { ?>
+<?php } if ($profile->hasSupport()) { ?>
 <p>If you encounter problems, then you can obtain direct assistance from you home organisation at:</p>
 <address class="cat-support-contact">
 <span><strong><?= o($profile->getDisplay()) ?></strong></span>

@@ -79,6 +79,7 @@ You will be redirected to <a href="<?= o($device->getRedirect()) ?>"><?= o($devi
 </main>
 
 <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+<hr class="visible-xs">
 <?php include 'support.php'; ?>
 </div>
 

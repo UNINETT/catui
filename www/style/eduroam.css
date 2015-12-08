@@ -1,8 +1,5 @@
-.insts li {
-	padding-top: 0;
-	padding-bottom: 0;
-}
-.insts li a {
+ul.insts li a {
+	/* ensure long institution names don't wrap */
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow-x: hidden;
@@ -11,65 +8,84 @@
 }
 
 .cat-institution-select {
+	/* Add spacing between search bar and institutions on desktop */
 	margin: 3em 0 0 0;
-	padding: 0 !important;
+	/* On mobile, center institution names */
 	text-align: center;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	/* No margin over headers, we use hr anyway */
 	margin-top: 0 !important;
 }
 
-.insts {
+ul.insts {
+	/* Vertical spacing between institutions on desktop */
 	line-height: 4em;
 }
-.insts, .cat-inst-action, .cat-alt-download {
-	padding: 0;
+ul.insts small {
+	opacity: .75;
 }
-.insts li, .cat-inst-action li, .cat-alt-download li {
+
+ul.insts, ul.cat-inst-action, ul.cat-alt-download, ul.cat-profiles {
+	/* Remove padding in inline lists */
+	padding: 0;
+	list-style: none;
+}
+ul.insts li, ul.cat-inst-action li, ul.cat-alt-download li, ul.cat-profiles li {
+	/* Show inline lists as inline */
 	display: inline-block;
-	max-width: 100%;
 }
 @media screen and (max-width: 767px) {
-	.insts li {
+	/* Changes for mobile version */
+	ul.insts li {
+		/* One inst per line, separate with hairlines */
 		width: 100%;
 		border-top: 1px solid #eee;
 	}
-	.insts li:last-child {
+	ul.insts li:last-child {
+		/* One inst per line, separate with hairlines */
 		border-bottom: 1px solid #eee;
 	}
-	.insts {
+	ul.insts {
+		/* Less vertical spacing between insts */
 		line-height: 2em;
 	}
 	.cat-institution-select {
+		/* Less spacing between search and insts */
 		margin: 0;
+	}
+	a.cat-btn-download {
+		/* Full-width button */
+		width: 100%;
+	}
+}
+@media screen and (min-width: 768px) {
+	/* Make sure that the download button isn't too small on desktop */
+	a.cat-btn-download {
+		min-width: 30%;
 	}
 }
 
-.cat-alt-download li {
+ul.cat-alt-download li {
+	/* Spacing between alt-links under download button */
 	padding-right: 2em;
 }
 
-ul.cat-profiles {
-	list-style: none;
-	padding: 0;
-}
-ul.cat-profiles li {
-	display: inline;
-}
-.cat-download a {
-}
-
 nav {
+	/* navbar at top of screen, crazy that bootstrap doesn't take care of this */
 	position: absolute !important;
 	top: 0 !important;
 	left: 0 !important;
 	right: 0 !important;
+	height: 50px;
 }
 .breadcrumb {
+	/* place breadcrumbs under navbar */
 	margin-top: 50px;
 }
 .breadcrumb li {
+	/* cut off long strings in the breadcrumbs */
 	max-width: 17em;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -77,19 +93,18 @@ nav {
 	overflow-y: hidden;
 }
 .cat-support-contact span {
+	/* Display all support channels on their own line */
 	display: block;
 }
 
 .legal {
+	/* Footer text, small and centered */
 	text-align: center;
 	font-size: 0.7em;
 }
 
 .cat-idp-logo {
+	/* Make sure the idp logo isn't too large */
 	max-width: 100%;
 	max-height: 12em;
-}
-
-.cat-distance {
-	opacity: .5;
 }
