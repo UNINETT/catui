@@ -55,7 +55,7 @@ ul.insts li, ul.cat-inst-action li, ul.cat-alt-download li, ul.cat-profiles li {
 		/* Less spacing between search and insts */
 		margin: 0;
 	}
-	a.cat-btn-download {
+	a.cat-btn-download, img.cat-btn-android-download {
 		/* Full-width button */
 		width: 100%;
 	}
@@ -64,6 +64,10 @@ ul.insts li, ul.cat-inst-action li, ul.cat-alt-download li, ul.cat-profiles li {
 	/* Make sure that the download button isn't too small on desktop */
 	a.cat-btn-download {
 		min-width: 30%;
+	}
+	img.cat-btn-android-download {
+		width: 20em;
+		max-width: 100%;
 	}
 }
 

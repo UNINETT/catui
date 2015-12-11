@@ -20,7 +20,7 @@ $canListProfiles = count($profiles) > 1;
 
 $devices = $profile->getDevices();
 if (!isset($_GET['os'])) {
-	$_GET['os'] = $profile->guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
+	$_GET['os'] = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
 }
 
 if (isset($_GET['os']) && array_key_exists($_GET['os'], $devices)) {

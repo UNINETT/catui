@@ -43,17 +43,17 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <p class="alert bg-warning cat-message"><?= $device->getMessage(); ?></p>
 <?php } ?>
 
-<p class="cat-download">Download your eduroam profile<br>
-<a class="<?= o($bootstrapStyle) ?> <?= o($catStyle) ?>" href="<?= o($device->getDownloadLink()) ?>"><big><big>
-<strong><?= o($profile->getDisplay()) ?></strong><br>
-<small><small><small class="cat-device-id"><?= o($device->getDisplay()) ?></small></small></small>
-</big></big></a>
-</p>
-<?php if ($device->isRedirect()) { ?>
-<p class="alert bg-warning cat-redirect-text">
-You will be redirected to <a href="<?= o($device->getRedirect()) ?>"><?= o($device->getRedirect()) ?></a>
-</p>
-<?php } ?>
+<?php
+if ($device->isRedirect()) {
+	$downloadInclude = 'download-redirect.php';
+} else {
+	$downloadInclude = 'download-' . strtolower($device->getGroup()) . '.php';
+}
+if (!file_exists($downloadInclude)) {
+	$downloadInclude = 'download-any.php';
+}
+require $downloadInclude;
+?>
 
 <?php if ($device->getDeviceCustomtext()) { ?>
 <p><?= o($device->getDeviceCustomtext()); ?></p>

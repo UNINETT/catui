@@ -2,6 +2,7 @@
 function o($s) {
 	return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 }
+$legal = '';
 ?><!DOCTYPE html>
 <title><?= o($title); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

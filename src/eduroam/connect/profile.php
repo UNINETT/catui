@@ -14,30 +14,6 @@ use \Eduroam\CAT\CAT;
 class Profile {
 
 	/**
-	 * Mapping of CAT device ID to user agent
-	 */
-	const USER_AGENTS = [
-		'vista' => ['/Windows NT 6[._]0/'],
-		'w7' => ['/Windows NT 6[._]1/'],
-		'w8' => ['/Windows NT 6[._][23]/'],
-		'w10' => ['/Windows NT 10[._]0+/', '/Windows NT/'],
-		'mobileconfig-56' => ['/\((iPad|iPhone|iPod);.*OS [56]_/'],
-		'apple_lion' => ['/Mac OS X 10[._]7/'],
-		'apple_m_lion' => ['/Mac OS X 10[._]8/'],
-		'apple_mav' => ['/Mac OS X 10[._]9/'],
-		'apple_yos' => ['/Mac OS X 10[._]10/'],
-		'apple_el_cap' => ['/Mac OS X 10[._]11/', '/Mac OS X/'],
-		'mobileconfig' => ['/\((iPad|iPhone|iPod);.*OS /'],
-		'linux' => ['/Linux(?!.*Android)/'],
-		'chromeos' => ['/CrOS/'],
-		'android43' => ['/Android 4[._]3/'],
-		'android_kitkat' => ['/Android 4[._][4-9]/'],
-		'android_lollipop' => ['/Android 5[._][0-9]/'],
-		'android_marshmallow' => ['/Android 6[._][0-9]/', '/Android/'],
-		0 => ['//'],
-	];
-
-	/**
 	 * List of all profiles by CAT base, identity provider and language.
 	 *
 	 * This profile data structure contains the name of the profile.
@@ -322,29 +298,6 @@ class Profile {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Guess the device ID based of the user agent string.
-	 *
-	 * The function can optionally limit itself to given deviceIDs,
-	 * which is useful if a profile is not available for all devices.
-	 *
-	 * @param string $userAgent User agent to guess the device ID for
-	 * @param string[] $deviceIDs Available device IDs to choose from, null for all
-	 *
-	 * @return string|null The guessed device ID
-	 */
-	public function guessDeviceID(string $userAgent, array $deviceIDs = null) {
-		$deviceIDs = $deviceIDs ?? array_keys(static::USER_AGENTS);
-		foreach($deviceIDs as $deviceID) {
-			foreach(static::USER_AGENTS[$deviceID] ?? [] as $regex) {
-				if (preg_match($regex, $userAgent) === 1) {
-					return $deviceID;
-				}
-			}
-		}
-		return null;
 	}
 
 }
