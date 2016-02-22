@@ -31,7 +31,7 @@ class CAT {
 	 * @param string $base Base URL for CAT API
 	 * @param int $cache Amount of seconds answers from CAT API are cached
 	 */
-	public function __construct($base = 'https://cat.eduroam.org/user/API.php', $cache = 86400) {
+	public function __construct($base = 'https://cat.eduroam.org/user/API.php', $cache = 1800) {
 		$parse = parse_url($base);
 		if (strpos($base, '?') || $parse === false || isset($parse['fragment']) || is_null($parse['host'])) {
 			throw new DomainException('Malformed URL');
