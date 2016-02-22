@@ -68,15 +68,21 @@ function url($url) {
 <address class="cat-support-contact">
 <span><strong><?= o($profile->getDisplay()) ?></strong></span>
 <?php if($profile->getLocalEmail()) { ?>
-<span><?= o($profile->getLocalEmail()) ?></span>
+<span><span class="glyphicon glyphicon-envelope"></span>
+<a href="<?= o($profile->getLocalEmail()) ?>"><?= o($profile->getLocalEmail()) ?></a>
+</span>
 <?php } ?>
 
 <?php if($profile->getLocalPhone()) { ?>
-<span><?= o($profile->getLocalPhone()) ?></span>
+<span><span class="glyphicon glyphicon-earphone"></span>
+<a href="tel:<?= o($profile->getLocalPhone()) ?>"><?= o($profile->getLocalPhone()) ?></a>
+</span>
 <?php } ?>
 
 <?php if($profile->getLocalUrl()) { ?>
-<span><a href="<?= o(href($profile->getLocalUrl())) ?>"><?= o(url($profile->getLocalUrl())) ?></a></span>
+<span><span class="glyphicon glyphicon-globe"></span>
+<a href="<?= o(href($profile->getLocalUrl())) ?>"><?= o(url($profile->getLocalUrl())) ?></a>
+</span>
 <?php } ?>
 </address>
 <?php } else { ?>

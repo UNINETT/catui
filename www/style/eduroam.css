@@ -96,9 +96,16 @@ nav {
 	overflow-x: hidden;
 	overflow-y: hidden;
 }
-.cat-support-contact span {
+#support {
+	text-align: justify;
+}
+.cat-support-contact > span {
 	/* Display all support channels on their own line */
 	display: block;
+}
+.cat-support-contact span.glyphicon {
+	color: gray;
+	margin-right: .25em;
 }
 
 .legal {

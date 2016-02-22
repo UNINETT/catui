@@ -78,7 +78,7 @@ require $downloadInclude;
 <?php } ?>
 </main>
 
-<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3" id="support">
 <hr class="visible-xs">
 <?php include 'support.php'; ?>
 </div>

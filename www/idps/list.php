@@ -26,13 +26,15 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 		<li class="pull-left" style="display:none">
 			<span class="glyphicon glyphicon-map-marker"></span>
 			<a href="javascript:cat_geolocate()"<?= isset($_GET['geo']) ? ' class="disabled"' : '' ?>>
-			Nearby</a>
+			<span class="hidden-xs">Find institutions</span>
+			nearby</a>
 		</li>
 		<?php } ?>
 		<li>
 			<span class="glyphicon glyphicon-globe"></span>
 			<a href="https://cat.eduroam.org/">
-			Worldwide</a>
+			<span class="hidden-xs">Show all institutions</span>
+			worldwide</a>
 		</li>
 	</ul>
 </div>
