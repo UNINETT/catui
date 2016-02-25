@@ -19,12 +19,12 @@
 				<li><a href="/">Connect</a></li>
 				<li><a href="#">About</a></li>
 				<li><a href="https://cat.eduroam.org/tou.php">Legal</a></li>
-				<li><a href="#">FAQ</a></li>
+				<li><a href="https://cat.eduroam.org/user/cat_info.php?page=faq&amp;lang=en">FAQ</a></li>
 			</ul>
-      <ul class="nav navbar-nav navbar-right">
+			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/develop/">Develop</a></li>
-        <li><a href="https://cat.eduroam.org/admin/">Admin</a></li>
-      </ul>
+				<li><a href="https://cat.eduroam.org/admin/">Admin</a></li>
+			</ul>
 		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->
 </nav>

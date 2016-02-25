@@ -37,10 +37,10 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <?php } ?>
 </h2>
 <?php if ($device->getEapCustomText()) { ?>
-<p class="alert bg-info cat-eap-custom-text"><?= o($device->getEapCustomText()); ?></p>
+<p class="alert alert-info cat-eap-custom-text"><?= o($device->getEapCustomText()); ?></p>
 <?php } ?>
 <?php if ($device->getMessage()) { ?>
-<p class="alert bg-warning cat-message"><?= $device->getMessage(); ?></p>
+<p class="alert alert-warning cat-message"><?= $device->getMessage(); ?></p>
 <?php } ?>
 
 <?php

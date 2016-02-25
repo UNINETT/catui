@@ -18,6 +18,12 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 	/* No margin over headers, we use hr anyway */
 	margin-top: 0 !important;
 }
+nav {
+	border-left: 0 !important;
+	border-right: 0 !important;
+	border-top: 0 !important;
+	border-radius: 0 !important;
+}
 
 ul.insts {
 	/* Vertical spacing between institutions on desktop */
@@ -58,6 +64,11 @@ ul.insts li, ul.cat-inst-action li, ul.cat-alt-download li, ul.cat-profiles li {
 	a.cat-btn-download, img.cat-btn-android-download {
 		/* Full-width button */
 		width: 100%;
+	}
+	.alert {
+		border-radius: 0 !important;
+		border-left: 0 !important;
+		border-right: 0 !important;
 	}
 }
 @media screen and (min-width: 768px) {
