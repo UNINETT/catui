@@ -28,6 +28,8 @@ if (isset($_GET['geo'])) {
 	if ($geo) {
 		$lat = $geo['latitude'];
 		$lon = $geo['longitude'];
+	} else {
+		unset($geo);
 	}
 }
 

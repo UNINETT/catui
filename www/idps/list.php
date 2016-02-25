@@ -48,7 +48,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 		?>
 		<li<?= $idp->hasSearchMatch($_GET['inst_search']) ? '' : ' style="display:none"' ?>><a href="/profiles/?idp=<?= o($idp->getEntityID()) ?>" class="btn <?= $idp->size ?>">
 			<span class="title"><?= o($idp->getTitle()) ?></span>
-			<?php if($geo && $idp->getGeo()) { ?>
+			<?php if(isset($geo) && $idp->getGeo()) { ?>
 			<small><small class="cat-distance"><?= round(min($idp->getDistanceFrom($lat, $lon))) ?>&nbsp;km</small></small>
 			<?php } ?>
 			</a></li>
