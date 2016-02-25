@@ -6,6 +6,6 @@
 </p>
 <?php if ($device->isRedirect()) { ?>
 <p class="alert bg-warning cat-redirect-text">
-You will be redirected to <a href="<?= o($device->getRedirect()) ?>"><?= o($device->getRedirect()) ?></a>
+Your profile is available on <a href="<?= o($device->getRedirect()) ?>"><?= o($device->getRedirect()) ?></a>
 </p>
 <?php } ?>
