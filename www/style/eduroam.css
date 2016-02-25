@@ -42,6 +42,36 @@ ul.insts li, ul.cat-inst-action li, ul.cat-alt-download li, ul.cat-profiles li {
 	/* Show inline lists as inline */
 	display: inline-block;
 }
+ul.insts.filtered li {
+	/* One inst per line, separate with hairlines */
+	width: 100%;
+	border-top: 1px solid #eee;
+	padding: 1em;
+}
+ul.insts.filtered a {
+	font-size: 1.5em;
+}
+ul.insts.filtered {
+	/* Less vertical spacing between insts */
+	line-height: 2em;
+	/* One inst per line, separate with hairlines */
+	border-bottom: 1px solid #eee;
+}
+ul.insts.match li a {
+	/* When a match is found, make it bigger and green */
+	font-size: 2em;
+	color: #0a6;
+}
+ul.insts.match li a:after {
+	/* When a match is found, show a <return> key icon */
+	content: "↵";
+	border: .1rem solid gray;
+	background: #eee;
+	color: black;
+	border-radius: .5rem;
+	padding: 0 .25em;
+	margin-left: 1em;
+}
 @media screen and (max-width: 767px) {
 	/* Changes for mobile version */
 	ul.insts li {
@@ -49,13 +79,11 @@ ul.insts li, ul.cat-inst-action li, ul.cat-alt-download li, ul.cat-profiles li {
 		width: 100%;
 		border-top: 1px solid #eee;
 	}
-	ul.insts li:last-child {
-		/* One inst per line, separate with hairlines */
-		border-bottom: 1px solid #eee;
-	}
 	ul.insts {
 		/* Less vertical spacing between insts */
 		line-height: 2em;
+		/* One inst per line, separate with hairlines */
+		border-bottom: 1px solid #eee;
 	}
 	.cat-institution-select {
 		/* Less spacing between search and insts */
@@ -113,6 +141,9 @@ nav {
 .cat-support-contact > span {
 	/* Display all support channels on their own line */
 	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .cat-support-contact span.glyphicon {
 	color: gray;

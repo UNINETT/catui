@@ -40,6 +40,13 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 </div>
 </div>
 <div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-info text-center" id="cat-welcome">
+Welcome to the eduroam configurator.
+<strong>Easy eduroam configuration for your mobile or PC</strong>.
+Enter the name of your institution in the box to get started.
+</div>
+</div>
+<div class="row">
 <div class="col-sm-12 col-md-12 col-lg-12 cat-institution-select">
 	<?php if (isset($_GET['inst_search'])) { ?>
 	<ul class="insts">
@@ -71,16 +78,32 @@ if (navigator.geolocation) {
 
 function inst_search() {
 	var needles = $('#cat-inst-search').val().trim().split(/[\s,]+/);
+	var shown = 0, hidden = 0;
 	$('ul.insts li').each(function(index){
 		var elem = this;
 		if (needles.reduce(function(carry, item){
 			return (carry && (item.length == 0 || $(elem, '.title').text().toLowerCase().indexOf(item.toLowerCase()) > -1))
 		}, true)) {
 			$(this).show();
+			shown += 1;
 		} else {
 			$(this).hide();
+			hidden += 1;
 		}
-	})
+	});
+	if (shown == 1) {
+		$('ul.insts').removeClass('filtered');
+		$('ul.insts').addClass('match');
+		$('#cat-welcome').hide();
+	} else if (hidden == 0) {
+		$('ul.insts').removeClass('filtered');
+		$('ul.insts').removeClass('match');
+	} else {
+		$('ul.insts').addClass('filtered');
+		$('ul.insts').removeClass('match');
+		$('#cat-welcome').hide();
+	}
+
 };
 
 function cat_geolocate() {
