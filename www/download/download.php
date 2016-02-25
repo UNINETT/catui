@@ -50,6 +50,9 @@ if ($device->isRedirect()) {
 	$downloadInclude = 'download-' . strtolower($device->getGroup()) . '.php';
 }
 if (!file_exists($downloadInclude)) {
+	$downloadInclude = 'download-' . strtolower($device->getDeviceID()) . '.php';
+}
+if (!file_exists($downloadInclude)) {
 	$downloadInclude = 'download-any.php';
 }
 require $downloadInclude;
