@@ -1,6 +1,9 @@
 {
-	"WEBDIR": "www",
-	"PHP_EXTENSIONS": ["curl", "geoip"],
-	"PHP_VERSION": "7",
-	"WEB_SERVER": "nginx"
+	"WEB_SERVER" : "nginx",
+	"PHP_EXTENSIONS" : [
+		"curl",
+		"geoip"
+	],
+	"PHP_VERSION" : "{PHP_70_LATEST}",
+	"WEBDIR" : "www"
 }
