@@ -116,12 +116,22 @@ ul.cat-alt-download li {
 }
 
 nav {
-	/* navbar at top of screen, crazy that bootstrap doesn't take care of this */
+	/* navbar at top of screen,
+	 * crazy that bootstrap doesn't take care of this */
 	position: absolute !important;
 	top: 0 !important;
 	left: 0 !important;
 	right: 0 !important;
 	height: 50px;
+}
+.navbar-collapse {
+	/* the background was transparent */
+	background: rgba(255,255,255,.9);
+	border-bottom: .1em solid gray;
+}
+.navbar-collapse a:hover {
+	color: white !important;
+	background: #06a !important;
 }
 .breadcrumb {
 	/* place breadcrumbs under navbar */
