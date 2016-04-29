@@ -98,6 +98,16 @@ ul.insts.match li a:after {
 		border-left: 0 !important;
 		border-right: 0 !important;
 	}
+
+	.navbar-collapse {
+		/* the background was transparent */
+		background: rgba(255,255,255,.95);
+		border-bottom: .1em solid gray;
+	}
+	.navbar-collapse a:hover {
+		color: white !important;
+		background: #06a !important;
+	}
 }
 @media screen and (min-width: 768px) {
 	/* Make sure that the download button isn't too small on desktop */
@@ -123,15 +133,6 @@ nav {
 	left: 0 !important;
 	right: 0 !important;
 	height: 50px;
-}
-.navbar-collapse {
-	/* the background was transparent */
-	background: rgba(255,255,255,.9);
-	border-bottom: .1em solid gray;
-}
-.navbar-collapse a:hover {
-	color: white !important;
-	background: #06a !important;
 }
 .breadcrumb {
 	/* place breadcrumbs under navbar */
