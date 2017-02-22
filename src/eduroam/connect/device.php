@@ -299,6 +299,10 @@ class Device {
 	 * @return string|null HTML message, without enclosing <p>
 	 */
 	public function getMessage() {
+		if ($this->isRedirect()) {
+			// CAT API gave us the wrong message
+			return null;
+		}
 		if (isset($this->getRaw()->message)) {
 			return $this->getRaw()->message;
 		}
