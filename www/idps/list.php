@@ -40,20 +40,21 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 </div>
 </div>
 <div class="row">
+<?php if (!isset($_GET['inst_search']) || !$_GET['inst_search']) { ?>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-info text-center" id="cat-welcome">
 Welcome to the eduroam configurator.
 <strong>Easy eduroam configuration for your mobile or PC</strong>.
 Enter the name of your institution in the box to get started.
 </div>
+<?php } ?>
 </div>
 <div class="row">
 <div class="col-sm-12 col-md-12 col-lg-12 cat-institution-select">
-	<?php if (isset($_GET['inst_search'])) { ?>
-	<ul class="insts">
+	<ul class="insts<?= isset($_GET['inst_search']) ? ' filtered' : '' ?>">
 		<?php
 		foreach($idps as $idp) {
 		?>
-		<li<?= $idp->hasSearchMatch($_GET['inst_search']) ? '' : ' style="display:none"' ?>><a href="/profiles/?idp=<?= o($idp->getEntityID()) ?>" class="btn <?= $idp->size ?>">
+		<li<?= !isset($_GET['inst_search']) || $idp->hasSearchMatch($_GET['inst_search']) ? '' : ' style="display:none"' ?>><a href="/profiles/?idp=<?= o($idp->getEntityID()) ?>" class="btn <?= $idp->size ?>">
 			<span class="title"><?= o($idp->getTitle()) ?></span>
 			<?php if(isset($geo) && $idp->getGeo()) { ?>
 			<small><small class="cat-distance"><?= round(min($idp->getDistanceFrom($lat, $lon))) ?>&nbsp;km</small></small>
@@ -61,7 +62,6 @@ Enter the name of your institution in the box to get started.
 			</a></li>
 		<?php } ?>
 	</ul>
-	<?php } ?>
 </div>
 </div>
 

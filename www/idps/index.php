@@ -3,9 +3,6 @@
 if (!isset($_GET['c'])) {
 	$_GET['c'] = 'NO';
 }
-if (!isset($_GET['inst_search'])) {
-	$_GET['inst_search'] = '';
-}
 
 $lat = null;
 $lon = null;
