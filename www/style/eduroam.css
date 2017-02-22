@@ -89,7 +89,7 @@ ul.insts.match li a:after {
 		/* Less spacing between search and insts */
 		margin: 0;
 	}
-	a.cat-btn-download, img.cat-btn-android-download {
+	a.cat-btn-download, img.cat-btn-android-download, a.cat-btn-redirect {
 		/* Full-width button */
 		width: 100%;
 	}
@@ -111,7 +111,7 @@ ul.insts.match li a:after {
 }
 @media screen and (min-width: 768px) {
 	/* Make sure that the download button isn't too small on desktop */
-	a.cat-btn-download {
+	a.cat-btn-download, a.cat-btn-redirect {
 		min-width: 30%;
 	}
 	img.cat-btn-android-download {
