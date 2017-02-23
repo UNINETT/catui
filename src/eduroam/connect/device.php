@@ -137,7 +137,7 @@ class Device {
 	 * CAT instance
 	 * @var CAT
 	 */
-	private $cat;
+	protected $cat;
 	/**
 	 * Identity provider Entity ID in CAT API
 	 * @var int
@@ -328,7 +328,7 @@ class Device {
 			return null;
 		}
 		if (!isset($this->deviceInfo)) {
-			$this->deviceInfo = $this->cat->getDeviceInfo($this->getDeviceID(), $this->getProfileID());
+			$this->deviceInfo = $this->cat->getDeviceInfo($this->deviceID, $this->profileID);
 		}
 		return $this->deviceInfo;
 	}

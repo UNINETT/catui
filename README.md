@@ -17,6 +17,7 @@ There are still many institutions that provide eduroam, but have not registered 
 * Bookmarkable/documentable URLs
 * Use browser's built-in history (previous/next page)
 * Quick start - enter the name of your institution and press enter
+* Directly get institution's CA pubkey PEM
 * Lemon fresh design
 * Easy to style
 * Forkable

@@ -262,6 +262,7 @@ class Profile {
 			if (($device->redirect || $device->status >= 0) && (!isset($device->options->hidden) || !$device->options->hidden))
 			$devices[$device->id] = new Device($this->cat, $this->idpID, $this->profileID, $device->id, $this->lang);
 		}
+		$devices['x-pem'] = new PemDevice($this->cat, $this->idpID, $this->profileID, $this->lang);
 		return $devices;
 	}
 
