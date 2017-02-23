@@ -337,16 +337,17 @@ class CAT {
 	 * as it is stored in CAT.
 	 *
 	 * @param int $profileID The ID number of the profile in the CAT database
+	 * @param string $lang Desired language for friendly strings
 	 *
 	 * @return \SimpleXMLElement Root element of the EAP-config
 	 */
-	public function getEapConfig($profileID) {
+	public function getEapConfig($profileID, $lang = '') {
 		return simplexml_load_string(
 			$this->executeCatQuery([
 				'action' => 'downloadInstaller',
 				'id' => 'eap-config',
 				'profile' => $profileID
-			], '', 'application/eap-config', 60)
+			], $lang, 'application/eap-config', 60)
 			// Short timeout, when certificate changes on CAT,
 			// it must change here as well.
 		);
