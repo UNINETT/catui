@@ -110,12 +110,16 @@ class CAT {
 	 * @param string[] $query Parameters for the CAT API, needs at least action
 	 * @param string $lang Desired language for friendly strings
 	 * @param string $accept Accepted content type for answer (request is always form-encoded)
+	 * @param int $cache Amount of seconds the result is cached, NULL indicates that the global value shoud be used
 	 *
 	 * @return string Raw answer from CAT query
 	 */
-	private function executeCatQuery($query, $lang = '', $accept = 'application/json') {
+	private function executeCatQuery($query, $lang = '', $accept = 'application/json', $cache = null) {
+		if (!isset($cache)) {
+			$cache = $this->cache;
+		}
 		$file = $this->getCatQueryFilename($query, $lang, $accept);
-		$useLocal = file_exists($file) && filemtime($file) > time() - $this->cache;
+		$useLocal = file_exists($file) && filemtime($file) > time() - $cache;
 		$url = $this->getCatURL($query, $lang);
 		if ($useLocal) {
 			$result = file_get_contents($file);
@@ -323,6 +327,29 @@ class CAT {
 				'id' => $osName,
 				'profile' => $profileID
 			]);
+	}
+
+	/**
+	 * Retrieve the EAP configuration.
+	 *
+	 * This is the eap-config "profile" from CAT, which is also used
+	 * by the Android installer.  It is the canonical form of a profile
+	 * as it is stored in CAT.
+	 *
+	 * @param int $profileID The ID number of the profile in the CAT database
+	 *
+	 * @return \SimpleXMLElement Root element of the EAP-config
+	 */
+	public function getEapConfig($profileID) {
+		return simplexml_load_string(
+			$this->executeCatQuery([
+				'action' => 'downloadInstaller',
+				'id' => 'eap-config',
+				'profile' => $profileID
+			], '', 'application/eap-config', 60)
+			// Short timeout, when certificate changes on CAT,
+			// it must change here as well.
+		);
 	}
 
 }
