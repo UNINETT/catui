@@ -59,7 +59,7 @@ require $downloadInclude;
 ?>
 
 <?php if ($device->getDeviceCustomtext()) { ?>
-<p><?= o($device->getDeviceCustomtext()); ?></p>
+<p><?= $device->getDeviceCustomtext(); ?></p>
 <?php } ?>
 
 <?php if (!$profile->isRedirect() || $canListProfiles) { ?>

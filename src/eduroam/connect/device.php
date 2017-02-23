@@ -278,13 +278,13 @@ class Device {
 	 *
 	 * This text may provide important information to the user and must be visible
 	 * on the download page.  If no text is provided, this function will return
-	 * a falsey value.
+	 * a falsey value.  The text is HTML escaped to prevent HTML injection.
 	 *
 	 * @return string|null Admin-provided custom device text
 	 */
 	public function getDeviceCustomText() {
-		if (isset($this->getRaw()->device_customtext)) {
-			return $this->getRaw()->device_customtext;
+		if (isset($this->getRaw()->device_customtext) && is_string($this->getRaw()->device_customtext)) {
+			return nl2br(htmlspecialchars($this->getRaw()->device_customtext, ENT_QUOTES, 'UTF-8'));
 		}
 	}
 

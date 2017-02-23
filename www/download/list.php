@@ -40,7 +40,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 <?= o($device->getDisplay()); ?>
 </a>
 <?php if ($device->getDeviceCustomText()) { ?>
-<small><?= o($device->getDeviceCustomText()) ?></small>
+<small><?= $device->getDeviceCustomText() ?></small>
 <?php } ?>
 </li>
 <?php } ?>
