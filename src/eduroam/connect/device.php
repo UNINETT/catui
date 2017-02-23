@@ -347,9 +347,7 @@ class Device {
 		if ($this->isRedirect()) {
 			return $this->getRaw()->redirect;
 		}
-		$this->cat->generateInstaller($this->getDeviceID(), $this->getProfileID());
-		return $this->cat->getBase() . '?'
-			.	http_build_query(['action' => 'downloadInstaller', 'id' => $this->getDeviceID(), 'profile' => $this->getProfileID()], '', '&', PHP_QUERY_RFC3986);
+		return $this->cat->getDownloadInstallerURL($this->deviceID, $this->profileID);
 	}
 
 	/**
