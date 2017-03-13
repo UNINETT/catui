@@ -9,7 +9,7 @@ function build_download_query($profile) {
 			'profile' => $profile->getProfileID()]);
 }
 if (count($profiles) === 1) {
-	header('Location: /download/?' . build_download_query(reset($profiles)), true, 302);
+	header('Location: ' . dirname($_SERVER['REQUEST_URI'] . 'x', 2) . '/download/?' . build_download_query(reset($profiles)), true, 302);
 	exit;
 }
 

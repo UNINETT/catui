@@ -38,7 +38,7 @@ if (isset($_GET['inst_search']) && $_GET['inst_search']) {
 		return $idp->hasSearchMatch($_GET['inst_search']);
 	});
 	if (count($filterIdps) === 1) {
-		header('Location: /profiles/?idp=' . rawurlencode(reset($filterIdps)->getEntityID()));
+		header('Location: ' . dirname($_SERVER['REQUEST_URI'] . 'x', 2) . '/profiles/?idp=' . rawurlencode(reset($filterIdps)->getEntityID()));
 		exit;
 	}
 }

@@ -9,3 +9,9 @@ $legal = '';
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <link rel="stylesheet" href="../style/eduroam.css" type="text/css">
 <link rel="stylesheet" href="../style/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+<style type="text/css">
+#breadcrumb {
+	width: 100% !important;
+	padding: 0 !important;
+}
+</style>

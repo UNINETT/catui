@@ -3,9 +3,13 @@ $title = 'eduroam ' . $idp->getDisplay();
 if ($canListProfiles || $profile->getDisplay() != $idp->getDisplay()) {
 	$title .= ' ' . $profile->getDisplay();
 }
-require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
+require (getenv('EC_HEADER') ? dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . getenv('EC_HEADER') : dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']));
 ?>
+<div class="container"><div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
+<div class="container"><div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 <ol class="breadcrumb">
 	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">eduroam</a></li>
 <?php if ($canListProfiles) { ?>
@@ -14,7 +18,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 	<li><?= o($idp->getDisplay()) ?></li>
 <?php } ?>
 	<li class="active"><?= o($profile->getDisplay()) ?></li>
-</ol>
+</ol></div></div></div>
 
 <div class="container">
 <div class="row">
@@ -50,4 +54,4 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 </div>
 </div>
 
-<?php require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'footer.php']); ?>
+<?php require (getenv('EC_FOOTER') ? dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . getenv('EC_FOOTER') : dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'footer.php']));
