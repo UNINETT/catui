@@ -1,9 +1,0 @@
-{
-	"WEB_SERVER" : "nginx",
-	"PHP_EXTENSIONS" : [
-		"curl",
-		"geoip"
-	],
-	"PHP_VERSION" : "{PHP_70_LATEST}",
-	"WEBDIR" : "www"
-}
