@@ -293,6 +293,7 @@ class Profile {
 	 * @return bool Profile has a redirect set
 	 */
 	public function isRedirect(): bool {
+		if (isset($this->getRaw()->devices[0]->redirect)) return true;
 		foreach($this->getDevices() as $device) {
 			if (!$device->isProfileRedirect()) {
 				return false;
