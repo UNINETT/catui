@@ -15,7 +15,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 	<?php foreach($_GET as $key => $value) if ($key !== 'inst_search') {
 		echo '<input type="hidden" name="' . o($key) . '" value="' . o($value) . '">';
 	} ?>
-	<p><input type="search" class="form-control input-lg" name="inst_search" id="cat-inst-search" value="<?= o($_GET['inst_search']) ?>" placeholder="institution name" autofocus></p>
+	<p><input type="search" class="form-control input-lg" name="inst_search" id="cat-inst-search" value="<?= o($_GET['inst_search'] ?? '') ?>" placeholder="institution name" autofocus></p>
 	</form>
 </div>
 </div>
