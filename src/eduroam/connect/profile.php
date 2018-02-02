@@ -258,11 +258,15 @@ class Profile {
 	public function getDevices(): array {
 		static::loadProfileAttributesByID($this->cat, $this->profileID);
 		$devices = [];
+		$addPem = false;
 		foreach($this->getRaw()->devices as $device) {
 			if (($device->redirect || $device->status >= 0) && (!isset($device->options->hidden) || !$device->options->hidden))
 			$devices[$device->id] = new Device($this->cat, $this->idpID, $this->profileID, $device->id, $this->lang);
+			$addPem |= !$device->redirect;
 		}
-		$devices['x-pem'] = new PemDevice($this->cat, $this->idpID, $this->profileID, $this->lang);
+		if ($addPem) {
+			$devices['x-pem'] = new PemDevice($this->cat, $this->idpID, $this->profileID, $this->lang);
+		}
 		return $devices;
 	}
 
@@ -293,7 +297,17 @@ class Profile {
 	 * @return bool Profile has a redirect set
 	 */
 	public function isRedirect(): bool {
-		if (isset($this->getRaw()->devices[0]->redirect)) return true;
+		$raw = $this->getRaw();
+
+		// Special case, a redirect-only profile will only have one devices
+		// that does not have a name, so the call to getDevices will fail.
+		if (isset($raw->devices) && sizeof($raw->devices) === 1 && isset($raw->devices[0])) {
+			if (isset($raw->devices[0]->redirect)) {
+				if ($raw->devices[0]->redirect) return true;
+			}
+		}
+
+		// Return true if every device is a redirect
 		foreach($this->getDevices() as $device) {
 			if (!$device->isProfileRedirect()) {
 				return false;

@@ -207,7 +207,8 @@ class Device {
 	 */
 	public function getRaw(): stdClass {
 		$this->loadDevices($this->cat, $this->idpID, $this->profileID, $this->lang);
-		return static::$devices[$this->cat->getBase()][$this->lang][$this->idpID][$this->profileID][$this->deviceID];
+		$deviceID = $this->deviceID === '0' ? 0 : $this->deviceID;
+		return static::$devices[$this->cat->getBase()][$this->lang][$this->idpID][$this->profileID][$deviceID];
 	}
 
 	/**
