@@ -56,7 +56,7 @@ Enter the name of your institution in the box to get started.
 		<?php
 		foreach($idps as $idp) {
 		?>
-		<li<?= !isset($_GET['inst_search']) || $idp->hasSearchMatch($_GET['inst_search']) ? '' : ' style="display:none"' ?>><a href="/profiles/?idp=<?= o($idp->getEntityID()) ?>" class="btn <?= $idp->size ?>">
+		<li<?= !isset($_GET['inst_search']) || $idp->hasSearchMatch($_GET['inst_search']) ? '' : ' style="display:none"' ?>><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>" class="btn <?= $idp->size ?>">
 			<span class="title"><?= o($idp->getTitle()) ?></span>
 			<?php if(isset($geo) && $idp->getGeo()) { ?>
 			<small><small class="cat-distance"><?= round(min($idp->getDistanceFrom($lat, $lon))) ?>&nbsp;km</small></small>
