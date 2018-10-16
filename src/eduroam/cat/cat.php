@@ -197,7 +197,7 @@ class CAT {
 	/**
 	 * List all identity providers.
 	 *
-	 * @link https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.listAllIdentityProviders
+	 * @link https://github.com/GEANT/CAT/blob/master/tutorials/UserAPI.md
 	 *
 	 * @param string $lang Desired language for friendly strings
 	 */
@@ -210,7 +210,7 @@ class CAT {
 	/**
 	 * List identity providers by country.
 	 *
-	 * @link https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.listIdentityProviders
+	 * @link https://github.com/GEANT/CAT/blob/master/tutorials/UserAPI.md
 	 *
 	 * @param string $country 2-letter ISO code in caps representing the country, for example <code>NO</code>
 	 * @param string $lang Desired language for friendly strings
@@ -218,14 +218,14 @@ class CAT {
 	public function listIdentityProviders($country, $lang = '') {
 		return $this->catJSONQuery([
 			'action' => 'listIdentityProviders',
-			'id' => $country,
+			'federation' => $country,
 		], $lang)->data;
 	}
 
 	/**
 	 * Get all profiles for an identity provider.
 	 *
-	 * @link https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.listProfiles
+	 * @link https://github.com/GEANT/CAT/blob/master/tutorials/UserAPI.md
 	 *
 	 * @param int $institutionID ID number in CAT database representing the identity provider
 	 * @param string $lang Desired language for friendly strings
@@ -233,14 +233,14 @@ class CAT {
 	public function listProfiles($idpID, $lang = '') {
 		return $this->catJSONQuery([
 			'action' => 'listProfiles',
-			'id' => $idpID,
+			'idp' => $idpID,
 		], $lang)->data;
 	}
 
 	/**
 	 * Get attributes for a profile, these include support information, description and devices, but not the name. 
 	 *
-	 * @link https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.profileAttributes
+	 * @link https://github.com/GEANT/CAT/blob/master/tutorials/UserAPI.md
 	 *
 	 * @param int $profileID The ID number of the profile in the CAT database
 	 * @param string $lang Desired language for friendly strings
@@ -248,7 +248,7 @@ class CAT {
 	public function profileAttributes($profileID, $lang = '') {
 		return $this->catJSONQuery([
 			'action' => 'profileAttributes',
-			'id' => $profileID,
+			'profile' => $profileID,
 		], $lang)->data;
 	}
 
@@ -257,7 +257,7 @@ class CAT {
 	 * Must be run at least once before the user downloads, but it's not needed to do this every time.
 	 * The built-in caching mechanism of this class should take care of that.
 	 *
-	 * @link https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.generateInstaller
+	 * @link https://github.com/GEANT/CAT/blob/master/tutorials/UserAPI.md
 	 *
 	 * @param string $osName Name of the operating system as presented in the CAT database (w8, mobileconfig, linux)
 	 * @param int $profileID The ID number of the profile in the CAT database
@@ -266,7 +266,7 @@ class CAT {
 	public function generateInstaller($osName, $profileID, $lang = '') {
 		return $this->catJSONQuery([
 			'action' => 'generateInstaller',
-			'id' => $osName,
+			'device' => $osName,
 			'profile' => $profileID,
 		], $lang)->data;
 	}
@@ -274,7 +274,7 @@ class CAT {
 	/**
 	 * List the devices just like #profileAttributes(int, string), but without custom texts.
 	 *
-	 * @link https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.listDevices
+	 * @link https://github.com/GEANT/CAT/blob/master/tutorials/UserAPI.md
 	 *
 	 * @param int $profileID The ID number of the profile in the CAT database
 	 * @param string $lang Desired language for friendly strings
@@ -282,7 +282,7 @@ class CAT {
 	public function listDevices($profileID, $lang = '') {
 		return $this->catJSONQuery([
 			'action' => 'listDevices',
-			'id' => $profileID,
+			'profile' => $profileID,
 		], $lang)->data;
 	}
 
@@ -324,7 +324,7 @@ class CAT {
 		$this->generateInstaller($osName, $profileID);
 		return $this->getCatURL([
 				'action' => 'downloadInstaller',
-				'id' => $osName,
+				'device' => $osName,
 				'profile' => $profileID
 			]);
 	}
@@ -345,7 +345,7 @@ class CAT {
 		return simplexml_load_string(
 			$this->executeCatQuery([
 				'action' => 'downloadInstaller',
-				'id' => 'eap-config',
+				'device' => 'eap-config',
 				'profile' => $profileID
 			], $lang, 'application/eap-config', 60)
 			// Short timeout, when certificate changes on CAT,
