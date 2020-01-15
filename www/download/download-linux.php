@@ -5,4 +5,4 @@
 </big></big></a>
 </p>
 <p>Or use the following one-line to install from the command-line</p>
-<pre>curl <?= o(escapeshellarg($device->getDownloadLink())) ?> | bash</pre>
+<pre>curl <?= o(escapeshellarg($device->getDownloadLink())) ?> | env python</pre>
