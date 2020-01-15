@@ -19,13 +19,20 @@ $profiles = \Eduroam\Connect\Profile::getProfilesByIdPEntityID($cat, $_GET['idp'
 $canListProfiles = count($profiles) > 1;
 
 $devices = $profile->getDevices();
-if (!isset($_GET['os'])) {
-	$_GET['os'] = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
+$os = null;
+if (isset($_GET['os'])) {
+	$os = $_GET['os'];
+} else {
+	if (isset($_SERVER['HTTP_SEC_CH_PLATFORM'])) {
+		$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_SEC_CH_PLATFORM'], array_keys($devices));
+	} else {
+		header('Accept-CH: Platform');
+		$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
+	}
 }
 
-if (isset($_GET['os']) && array_key_exists($_GET['os'], $devices)) {
-	$os = $_GET['os'];
-	$device = $profile->getDevices()[$_GET['os']];
+if (null !== $os && array_key_exists($os, $devices)) {
+	$device = $profile->getDevices()[$os];
 	$file = __DIR__ . DIRECTORY_SEPARATOR . 'download.php';
 } else {
 	$file = __DIR__ . DIRECTORY_SEPARATOR . 'list.php';
