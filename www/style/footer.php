@@ -17,7 +17,6 @@
 		<div class="collapse navbar-collapse" id="bs-eduroam-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li><a href="/">Connect</a></li>
-				<li><a href="#">About</a></li>
 				<li><a href="https://cat.eduroam.org/tou.php">Legal</a></li>
 				<li><a href="https://cat.eduroam.org/user/cat_info.php?page=faq&amp;lang=en">FAQ</a></li>
 			</ul>
