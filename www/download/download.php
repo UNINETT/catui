@@ -74,7 +74,7 @@ require $downloadInclude;
 </ul>
 <?php } ?>
 
-<?php if (!$profile->isRedirect()) { ?>
+<?php if (!$profile->isRedirect() && !$device->isRedirect() && $device->getDeviceInfo()) { ?>
 <hr>
 <h3><?= o($device->getDisplay()) ?> Instructions</h3>
 <?php if ($device->getDeviceInfo()) { ?>
