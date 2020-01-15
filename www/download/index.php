@@ -23,7 +23,7 @@ $os = null;
 if (isset($_GET['os'])) {
 	$os = $_GET['os'];
 } else {
-	if (isset($_SERVER['HTTP_SEC_CH_PLATFORM'])) {
+	if (array_key_exists('HTTP_SEC_CH_PLATFORM', $_SERVER)) {
 		$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_SEC_CH_PLATFORM'], array_keys($devices));
 	} else {
 		header('Accept-CH: Platform');
@@ -31,10 +31,14 @@ if (isset($_GET['os'])) {
 	}
 }
 
-if (null !== $os && array_key_exists($os, $devices)) {
-	$device = $profile->getDevices()[$os];
-	$file = __DIR__ . DIRECTORY_SEPARATOR . 'download.php';
-} else {
+$device = null !== $os && array_key_exists($os, $devices)
+	? $profile->getDevices()[$os]
+	: null;
+	;
+
+if (null === $device) {
 	$file = __DIR__ . DIRECTORY_SEPARATOR . 'list.php';
+} else {
+	$file = __DIR__ . DIRECTORY_SEPARATOR . 'download.php';
 }
 include $file;
