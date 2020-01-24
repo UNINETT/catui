@@ -27,7 +27,9 @@ if (isset($_GET['os'])) {
 		$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_SEC_CH_PLATFORM'], array_keys($devices));
 	} else {
 		header('Accept-CH: Platform');
-		$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
+		if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
+			$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
+		}
 	}
 }
 
