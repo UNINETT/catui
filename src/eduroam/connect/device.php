@@ -20,7 +20,7 @@ class Device {
 		'w10' => ['/Windows NT 10[._]/', '/Windows NT 1[1-9]/', '/Windows NT [2-9][0-9]/'],
 		'mobileconfig-56' => ['/\((iPad|iPhone|iPod);.*OS [56]_/'],
 		'mobileconfig' => ['/\((iPad|iPhone|iPod);.*OS [7-9]/', '/\((iPad|iPhone|iPod);.*OS 1[0-1]/'],
-		'mobileconfig-12' => ['/\((iPad|iPhone|iPod);.*OS 1[2-9]/', '/\((iPad|iPhone|iPod);.*OS [2-9][0-9]/'],
+		'mobileconfig12' => ['/\((iPad|iPhone|iPod);.*OS 1[2-9]/', '/\((iPad|iPhone|iPod);.*OS [2-9][0-9]/'],
 		'apple_lion' => ['/Mac OS X 10[._]7/'],
 		'apple_m_lion' => ['/Mac OS X 10[._]8/'],
 		'apple_mav' => ['/Mac OS X 10[._]9/'],
