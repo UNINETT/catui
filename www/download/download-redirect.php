@@ -4,8 +4,7 @@
 <small><small><small class="cat-device-id"><?= o($device->getDisplay()) ?></small></small></small>
 </big></big></a>
 </p>
-<?php if ($device->isRedirect()) { ?>
 <p class="alert bg-warning cat-redirect-text">
 Your profile is available on <a href="<?= o($device->getRedirect()) ?>"><?= o($device->getRedirect()) ?></a>
 </p>
-<?php } ?>
+<?= $device->getMessage() ?>

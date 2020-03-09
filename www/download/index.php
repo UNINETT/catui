@@ -37,6 +37,9 @@ $device = null !== $os && array_key_exists($os, $devices)
 	? $profile->getDevices()[$os]
 	: null;
 	;
+if (null === $device && $profile->isRedirect()) {
+	$device = $profile->getDevices()[0];
+}
 
 if (null === $device) {
 	$file = __DIR__ . DIRECTORY_SEPARATOR . 'list.php';
