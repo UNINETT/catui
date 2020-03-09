@@ -11,10 +11,10 @@ function makeQueryString($args) {
 	return '?' . http_build_query($args);
 }
 
-$cat = new \Eduroam\CAT\CAT();
-$idp = new \Eduroam\Connect\IdentityProvider($cat, $_GET['idp']);
-$profile = new \Eduroam\Connect\Profile($cat, $_GET['idp'], $_GET['profile']);
-$profiles = \Eduroam\Connect\Profile::getProfilesByIdPEntityID($cat, $_GET['idp']);
+$cat = new \eduroam\CAT\CAT();
+$idp = new \eduroam\CAT\IdentityProvider($cat, $_GET['idp']);
+$profile = new \eduroam\CAT\Profile($cat, $_GET['idp'], $_GET['profile']);
+$profiles = \eduroam\CAT\Profile::getProfilesByIdPEntityID($cat, $_GET['idp']);
 
 $canListProfiles = count($profiles) > 1;
 
@@ -24,11 +24,11 @@ if (isset($_GET['os'])) {
 	$os = $_GET['os'];
 } else {
 	if (array_key_exists('HTTP_SEC_CH_PLATFORM', $_SERVER)) {
-		$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_SEC_CH_PLATFORM'], array_keys($devices));
+		$os = \eduroam\CAT\Device::guessDeviceID($_SERVER['HTTP_SEC_CH_PLATFORM'], array_keys($devices));
 	} else {
 		header('Accept-CH: Platform');
 		if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
-			$os = \Eduroam\Connect\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
+			$os = \eduroam\CAT\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT'], array_keys($devices));
 		}
 	}
 }

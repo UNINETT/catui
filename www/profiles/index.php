@@ -1,7 +1,7 @@
 <?php require dirname(dirname(__DIR__)) . implode(DIRECTORY_SEPARATOR, ['', 'src', '_autoload.php']);
 
-$cat = new \Eduroam\CAT\CAT();
-$profiles = \Eduroam\Connect\Profile::getProfilesByIdPEntityID($cat, $_GET['idp']);
+$cat = new \eduroam\CAT\CAT();
+$profiles = \eduroam\CAT\Profile::getProfilesByIdPEntityID($cat, $_GET['idp']);
 
 function build_download_query($profile) {
 	return http_build_query([
@@ -13,6 +13,6 @@ if (count($profiles) === 1) {
 	exit;
 }
 
-$idp = new \Eduroam\Connect\IdentityProvider($cat, $_GET['idp']);
+$idp = new \eduroam\CAT\IdentityProvider($cat, $_GET['idp']);
 
 require 'list.php';

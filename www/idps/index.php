@@ -30,9 +30,9 @@ if (isset($_GET['geo'])) {
 	}
 }
 
-$cat = new \Eduroam\CAT\CAT();
+$cat = new \eduroam\CAT\CAT();
 
-$idps = \Eduroam\Connect\IdentityProvider::getIdentityProvidersByCountry($cat, $_GET['c']);
+$idps = \eduroam\CAT\IdentityProvider::getIdentityProvidersByCountry($cat, $_GET['c']);
 if (isset($_GET['inst_search']) && $_GET['inst_search']) {
 	$filterIdps = array_filter($idps, function($idp){
 		return $idp->hasSearchMatch($_GET['inst_search']);

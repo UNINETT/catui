@@ -1,69 +1,65 @@
 <?php declare(strict_types=1);
-namespace Eduroam\Connect;
 
-use \Eduroam\CAT\CAT;
+/*
+ * This file is part of the PHP eduroam CAT client
+ * A client to download data from https://cat.eduroam.org/
+ *
+ * Copyright: 2018-2020, Jørn Åne de Jong, Uninett AS <jorn.dejong@uninett.no>
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+namespace eduroam\CAT;
 
 /**
  * A subclass of Device that returns only the certificate as a PEM.
  * It will behave identical to EAP config, except for that it will
- * not return the XML data from CAT verbatim, but parse the XML
+ * not return the XML data from CAT verbatim, but parse the eap-config
  * and return only the PEM certificate.
  *
  * A disadvantage of using PEM is that any other settings, such as
  * EAP types or proxy settings are lost, but these days these tend
  * to be the same for different institutions anyway.
  */
-class PemDevice extends Device {
-
+class PemDevice extends Device
+{
 	/**
 	 * Construct a new lazy loaded device.
 	 *
-	 * @param CAT $cat CAT instance
-	 * @param int $idpID Identity provider ID
-	 * @param int $profileID Profile ID
-	 * @param string $deviceID Device ID
-	 * @param string $lang Language
+	 * @param CAT    $cat       CAT instance
+	 * @param int    $idpID     Identity provider ID
+	 * @param int    $profileID Profile ID
+	 * @param string $deviceID  Device ID (eap-config)
+	 * @param string $lang      Language
 	 */
-	public function __construct(CAT $cat, int $idpID, int $profileID, string $deviceID, string $lang = '') {
-		parent::__construct($cat, $idpID, $profileID, 'eap-config', $lang);
+	public function __construct( CAT $cat, int $idpID, int $profileID, string $deviceID, string $lang = '' )
+	{
+		\assert( 'eap-config' === $deviceID, 'PEM device must have $deviceID to be eap-config' );
+		parent::__construct( $cat, $idpID, $profileID, 'eap-config', $lang );
 	}
 
 	/**
 	 * Get the ID of this device as it is stored in the CAT database.
 	 *
+	 * Since this is a constructed device, we prepend the x- prefix
+	 * to the constructed name of the device, "pem"
+	 *
 	 * @return string The device ID
 	 */
-	public function getDeviceID(): string {
+	public function getDeviceID(): string
+	{
 		return 'x-pem';
 	}
 
 	/**
 	 * Get the friendly name for this device.
 	 *
-	 * This is always the string 'CA certificate (PEM)',
-	 * since 
+	 * This is always the string 'CA certificate (PEM)'
 	 *
-	 * @return string
+	 * @return string 'CA certificate (PEM)'
 	 */
-	public function getDisplay(): string {
+	public function getDisplay(): string
+	{
 		return 'eduroam CA certificate (PEM)';
-	}
-
-	/**
-	 * Get the status of this device.
-	 *
-	 * It's not clear what this means, but 0 appears to mean success.
-	 *
-	 * @return int status
-	 */
-	public function getStatus(): int {
-		if ($this->isRedirect()) {
-			// We can't obtain a certificate if this is a redirect.
-			// Since we don't know what the status field does,
-
-			return -1;
-		}
-		return parent::getStatus();
 	}
 
 	/**
@@ -76,7 +72,8 @@ class PemDevice extends Device {
 	 *
 	 * @return string Plaintext message, safe to put in HTML
 	 */
-	public function getMessage() {
+	public function getMessage()
+	{
 		return 'This option allows an experienced user to get the CA certificate used by this institutions RADIUS server, in order to configure eduroam manually.  Note that any EAP and proxy settings are not included, and you may need to contact your institution to ask about those.';
 	}
 
@@ -90,7 +87,8 @@ class PemDevice extends Device {
 	 *
 	 * @return string Plaintext message, safe to put in HTML
 	 */
-	public function getDeviceInfo() {
+	public function getDeviceInfo()
+	{
 		return 'No instructions are provided for this option, as this is option only meant for experienced users that are able to configure eduroam on their devices themselves.';
 	}
 
@@ -105,8 +103,9 @@ class PemDevice extends Device {
 	 *
 	 * @return string Data URL containing all certificates
 	 */
-	public function getDownloadLink(): string {
-		return 'data:application/x-x509-ca-cert;base64,' . base64_encode(implode("\n", $this->getCertificates()));
+	public function getDownloadLink(): string
+	{
+		return 'data:application/x-x509-ca-cert;base64,' . \base64_encode( \implode( "\n", $this->getCertificates() ) );
 	}
 
 	/**
@@ -121,22 +120,23 @@ class PemDevice extends Device {
 	 * The result can be converted to a .pem file simply by
 	 * concatination.
 	 *
-	 * @return string[] Array of certificates in PEM format.
+	 * @return string[] array of certificates in PEM format
 	 */
-	public function getCertificates(): array {
+	public function getCertificates(): array
+	{
 		$certificates = [];
-		$methods = $this->cat->getEapConfig($this->getProfileID())->EAPIdentityProvider->AuthenticationMethods;
-		foreach($methods->AuthenticationMethod as $method) {
-			foreach($method->ServerSideCredential->CA as $ca) {
+		$methods = $this->cat->getEapConfig( $this->getProfileID() )->EAPIdentityProvider->AuthenticationMethods;
+		foreach ( $methods->AuthenticationMethod as $method ) {
+			foreach ( $method->ServerSideCredential->CA as $ca ) {
 				$encoded = "-----BEGIN CERTIFICATE-----\n"
-					. implode("\n", str_split($ca->__toString(), 64))
+					. \implode( "\n", \str_split( $ca->__toString(), 64 ) )
 					. "\n-----END CERTIFICATE-----\n";
-				if (!in_array($encoded, $certificates)) {
+				if ( !\in_array( $encoded, $certificates, true ) ) {
 					$certificates[] = $encoded;
 				}
 			}
 		}
+
 		return $certificates;
 	}
-
 }

@@ -1,15 +1,20 @@
 <?php declare(strict_types=1);
-namespace Eduroam\Connect;
 
-use \stdClass;
+/*
+ * This file is part of the PHP eduroam CAT client
+ * A client to download data from https://cat.eduroam.org/
+ *
+ * Copyright: 2018-2020, Jørn Åne de Jong, Uninett AS <jorn.dejong@uninett.no>
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
 
-use \Eduroam\CAT\CAT;
+namespace eduroam\CAT;
 
 /**
  * A device that can be used on the eduroam network with a given profile.
  */
-class Device {
-
+class Device
+{
 	/**
 	 * Mapping of CAT device ID to user agent
 	 */
@@ -53,7 +58,6 @@ class Device {
 		'Other' => ['//'],
 	];
 
-
 	/**
 	 * List of all devices, by CAT base, identity and profile.
 	 *
@@ -64,30 +68,61 @@ class Device {
 	public static $devices;
 
 	/**
-	 * Fill lazy loaded $devices.
+	 * CAT instance
 	 *
-	 * Consumers should be hesitant to use this function, and should try to get
-	 * the devices from Profile::getDevices() first, since it may already have
-	 * loaded them into memory.
-	 *
-	 * @param CAT $cat CAT instance
-	 * @param int $idpID Identity provider ID
-	 * @param int $profileID Profile ID
-	 * @param string $lang Language
-	 *
-	 * @see https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.listDevices
+	 * @var CAT
 	 */
-	private static function loadDevices(CAT $cat, int $idpID, int $profileID, string $lang = '') {
-		$devices = 0;
-		if (!isset(static::$devices[$cat->getBase()][$lang][$idpID][$profileID])) {
-			$devices = Profile::getRawDevicesByProfileID($cat, $profileID, $lang);
-			if (!$devices) {
-				$devices = $cat->listDevices($profileID);
-			}
-			foreach($devices as $device) {
-				static::$devices[$cat->getBase()][$lang][$idpID][$profileID][$device->id] = $device;
-			}
-		}
+	protected $cat;
+
+	/**
+	 * Identity provider Entity ID in CAT API
+	 *
+	 * @var int
+	 */
+	private $idpID;
+
+	/**
+	 * Profile ID in CAT API
+	 *
+	 * @var int
+	 */
+	private $profileID;
+
+	/**
+	 * Device ID in CAT API
+	 *
+	 * @var string
+	 */
+	private $deviceID;
+
+	/**
+	 * Device info, this is a separate CAT call and thus not in #getRaw()
+	 */
+	private $deviceInfo;
+
+	/**
+	 * Language flag to use in requests against CAT
+	 *
+	 * @var string
+	 */
+	private $lang;
+
+	/**
+	 * Construct a new lazy loaded device.
+	 *
+	 * @param CAT    $cat       CAT instance
+	 * @param int    $idpID     Identity provider ID
+	 * @param int    $profileID Profile ID
+	 * @param string $deviceID  Device ID
+	 * @param string $lang      Language
+	 */
+	public function __construct( CAT $cat, int $idpID, int $profileID, string $deviceID, string $lang = '' )
+	{
+		$this->cat = $cat;
+		$this->idpID = $idpID;
+		$this->profileID = $profileID;
+		$this->deviceID = $deviceID;
+		$this->lang = $lang;
 	}
 
 	/**
@@ -95,25 +130,31 @@ class Device {
 	 * the different device profiles into a more generic operating system group.
 	 *
 	 * @param Device[] $devices The devices to group, typically output from
-	 * 	Profile#getDevices()
+	 *                          Profile#getDevices()
 	 *
 	 * @return Device[][]
+	 *
+	 * @psalm-suppress TooManyArguments
+	 * @suppress PhanParamTooManyCallable
+	 * @suppress PhanUnusedVariableValueOfForeachWithKey
 	 */
-	public static function groupDevices(array $devices): array {
+	public static function groupDevices( array $devices ): array
+	{
 		// Make array with same keys as DEVICE_GROUPS, but all initial values are []
-		$result = array_map(function(){return [];}, static::DEVICE_GROUPS);
-		foreach($devices as $device) {
-			if ($device->getStatus() != 0) continue;
+		$result = \array_map( static function(){return []; }, static::DEVICE_GROUPS );
+		foreach ( $devices as $device ) {
+			if ( !$device->isRedirect() && 0 !== $device->getStatus() ) {
+				continue;
+			}
 			$group = $device->getGroup();
-			if (!is_null($group)) {
-				$result[$group][] = $device;
+			$result[$group][] = $device;
+		}
+		foreach ( $result as $key => $value ) {
+			if ( !$result[$key] ) {
+				unset( $result[$key] );
 			}
 		}
-		foreach($result as $key => $value) {
-			if (!$result[$key]) {
-				unset($result[$key]);
-			}
-		}
+
 		return $result;
 	}
 
@@ -123,68 +164,25 @@ class Device {
 	 * The function can optionally limit itself to given deviceIDs,
 	 * which is useful if a profile is not available for all devices.
 	 *
-	 * @param string $userAgent User agent to guess the device ID for
-	 * @param string[] $deviceIDs Available device IDs to choose from, null for all
+	 * @param string    $userAgent User agent to guess the device ID for
+	 * @param ?string[] $deviceIDs Available device IDs to choose from, null for all
 	 *
-	 * @return string|null The guessed device ID
+	 * @return ?string The guessed device ID
 	 */
-	public static function guessDeviceID(string $userAgent, array $deviceIDs = null) {
-		$deviceIDs = $deviceIDs ?? array_keys(Device::USER_AGENTS);
-		foreach($deviceIDs as $deviceID) {
-			foreach(Device::USER_AGENTS[$deviceID] ?? [] as $regex) {
-				if (preg_match($regex, $userAgent) === 1) {
-					return $deviceID;
+	public static function guessDeviceID( string $userAgent, ?array $deviceIDs = null ): ?string
+	{
+		$deviceIDs = $deviceIDs ?? \array_keys( self::USER_AGENTS );
+		foreach ( $deviceIDs as $deviceID ) {
+			if ( \is_string( $deviceID ) ) {
+				foreach ( self::USER_AGENTS[$deviceID] ?? [] as $regex ) {
+					if ( 1 === \preg_match( $regex, $userAgent ) ) {
+						return $deviceID;
+					}
 				}
 			}
 		}
+
 		return null;
-	}
-
-	/**
-	 * CAT instance
-	 * @var CAT
-	 */
-	protected $cat;
-	/**
-	 * Identity provider Entity ID in CAT API
-	 * @var int
-	 */
-	private $idpID;
-	/**
-	 * Profile ID in CAT API
-	 * @var int
-	 */
-	private $profileID;
-	/**
-	 * Device ID in CAT API
-	 * @var int
-	 */
-	private $deviceID;
-	/**
-	 * Device info, this is a separate CAT call and thus not in #getRaw()
-	 */
-	private $deviceInfo;
-	/**
-	 * Language flag to use in requests against CAT
-	 * @var string
-	 */
-	private $lang;
-
-	/**
-	 * Construct a new lazy loaded device.
-	 *
-	 * @param CAT $cat CAT instance
-	 * @param int $idpID Identity provider ID
-	 * @param int $profileID Profile ID
-	 * @param string $deviceID Device ID
-	 * @param string $lang Language
-	 */
-	public function __construct(CAT $cat, int $idpID, int $profileID, string $deviceID, string $lang = '') {
-		$this->cat = $cat;
-		$this->idpID = $idpID;
-		$this->profileID = $profileID;
-		$this->deviceID = $deviceID;
-		$this->lang = $lang;
 	}
 
 	/**
@@ -192,7 +190,8 @@ class Device {
 	 *
 	 * @return string The device ID
 	 */
-	public function getDeviceID(): string {
+	public function getDeviceID(): string
+	{
 		return $this->deviceID;
 	}
 
@@ -201,7 +200,8 @@ class Device {
 	 *
 	 * @return int The profile ID
 	 */
-	public function getProfileID(): int {
+	public function getProfileID(): int
+	{
 		return $this->profileID;
 	}
 
@@ -210,11 +210,13 @@ class Device {
 	 *
 	 * This is the JSON data converted to a PHP object.
 	 *
-	 * @return stdClass
+	 * @return \stdClass
 	 */
-	public function getRaw(): stdClass {
-		$this->loadDevices($this->cat, $this->idpID, $this->profileID, $this->lang);
-		$deviceID = $this->deviceID === '0' ? 0 : $this->deviceID;
+	public function getRaw(): \stdClass
+	{
+		$this->loadDevices( $this->cat, $this->idpID, $this->profileID, $this->lang );
+		$deviceID = '0' === $this->deviceID ? 0 : $this->deviceID;
+
 		return static::$devices[$this->cat->getBase()][$this->lang][$this->idpID][$this->profileID][$deviceID];
 	}
 
@@ -229,11 +231,13 @@ class Device {
 	 *
 	 * @return string
 	 */
-	public function getDisplay(): string {
+	public function getDisplay(): string
+	{
 		$raw = $this->getRaw();
-		if ($this->isProfileRedirect()) {
+		if ( $this->isProfileRedirect() ) {
 			return 'External';
 		}
+
 		return $raw->display;
 	}
 
@@ -244,11 +248,14 @@ class Device {
 	 *
 	 * @return int status
 	 */
-	public function getStatus(): int {
+	public function getStatus(): int
+	{
 		$raw = $this->getRaw();
-		if (isset($raw->status)) {
+		if ( isset( $raw->status ) ) {
 			return $raw->status;
 		}
+
+		return -1;
 	}
 
 	/**
@@ -262,7 +269,8 @@ class Device {
 	 *
 	 * @return string Redirect URL
 	 */
-	public function getRedirect(): string {
+	public function getRedirect(): string
+	{
 		return $this->getRaw()->redirect;
 	}
 
@@ -273,10 +281,11 @@ class Device {
 	 * on the download page.  If no text is provided, this function will return
 	 * a falsey value.
 	 *
-	 * @return string|null Admin-provided custom EAP text
+	 * @return null|string Admin-provided custom EAP text
 	 */
-	public function getEapCustomText() {
-		if (isset($this->getRaw()->eap_customtext)) {
+	public function getEapCustomText()
+	{
+		if ( isset( $this->getRaw()->eap_customtext ) ) {
 			return $this->getRaw()->eap_customtext;
 		}
 	}
@@ -288,11 +297,12 @@ class Device {
 	 * on the download page.  If no text is provided, this function will return
 	 * a falsey value.  The text is HTML escaped to prevent HTML injection.
 	 *
-	 * @return string|null Admin-provided custom device text
+	 * @return null|string Admin-provided custom device text
 	 */
-	public function getDeviceCustomText() {
-		if (isset($this->getRaw()->device_customtext) && is_string($this->getRaw()->device_customtext)) {
-			return nl2br(htmlspecialchars($this->getRaw()->device_customtext, ENT_QUOTES, 'UTF-8'));
+	public function getDeviceCustomText()
+	{
+		if ( isset( $this->getRaw()->device_customtext ) && \is_string( $this->getRaw()->device_customtext ) ) {
+			return \nl2br( \htmlspecialchars( $this->getRaw()->device_customtext, \ENT_QUOTES, 'UTF-8' ) );
 		}
 	}
 
@@ -304,16 +314,15 @@ class Device {
 	 * This documentation is based on reverse engineering and may improve when
 	 * better documentation becomes available.
 	 *
+	 * On redirects a message is not provided and the function returns null
+	 *
 	 * @deprecated
 	 *
-	 * @return string|null HTML message, without enclosing <p>
+	 * @return null|string HTML message, without enclosing <p>
 	 */
-	public function getMessage() {
-		if ($this->isRedirect()) {
-			// CAT API gave us the wrong message
-			return null;
-		}
-		if (isset($this->getRaw()->message)) {
+	public function getMessage()
+	{
+		if ( isset( $this->getRaw()->message ) ) {
 			return $this->getRaw()->message;
 		}
 	}
@@ -328,16 +337,19 @@ class Device {
 	 *
 	 * @deprecated
 	 *
-	 * @return string|null HTML message, with enclosing <p>
+	 * @return null|string HTML message, with enclosing <p>
 	 */
-	public function getDeviceInfo() {
-		if ($this->isRedirect()) {
-			// Seems like CAT doesn't answer this one on redirects...
-			return null;
+	public function getDeviceInfo()
+	{
+		if ( $this->isRedirect() ) {
+			// This is an API call to CAT, but it returns empty for redirects,
+			// which would make the client emit an exception
+			return;
 		}
-		if (!isset($this->deviceInfo)) {
-			$this->deviceInfo = $this->cat->getDeviceInfo($this->deviceID, $this->profileID);
+		if ( !isset( $this->deviceInfo ) ) {
+			$this->deviceInfo = $this->cat->getDeviceInfo( $this->deviceID, $this->profileID );
 		}
+
 		return $this->deviceInfo;
 	}
 
@@ -351,11 +363,13 @@ class Device {
 	 *
 	 * @return string URL
 	 */
-	public function getDownloadLink(): string {
-		if ($this->isRedirect()) {
+	public function getDownloadLink(): string
+	{
+		if ( $this->isRedirect() ) {
 			return $this->getRaw()->redirect;
 		}
-		return $this->cat->getDownloadInstallerURL($this->deviceID, $this->profileID);
+
+		return $this->cat->getDownloadInstallerURL( $this->deviceID, $this->profileID );
 	}
 
 	/**
@@ -363,8 +377,9 @@ class Device {
 	 *
 	 * @return bool This device's URL is a redirect
 	 */
-	public function isRedirect(): bool {
-		return !!$this->getRaw()->redirect;
+	public function isRedirect(): bool
+	{
+		return (bool)$this->getRaw()->redirect;
 	}
 
 	/**
@@ -373,26 +388,57 @@ class Device {
 	 *
 	 * @return bool Redirect is set by the profile
 	 */
-	public function isProfileRedirect(): bool {
+	public function isProfileRedirect(): bool
+	{
 		$raw = $this->getRaw();
-		return $this->deviceID === '0' && !isset($raw->display) && $raw->redirect;
+
+		return '0' === $this->deviceID && !isset( $raw->display ) && $raw->redirect;
 	}
 
 	/**
 	 * Get the group this device is associated with.
 	 *
-	 * @return string Name of the group
+	 * @return 0|string Name of the group
 	 */
-	public function getGroup(): string {
+	public function getGroup()
+	{
 		// Assuming static::DEVICE_GROUPS ends with a regular expression
 		// that matches everything, such as //
-		foreach(static::DEVICE_GROUPS as $group => $osRegexps) {
-			foreach($osRegexps as $osRegexp) {
-				if (preg_match($osRegexp, $this->getDeviceID()) === 1) {
+		foreach ( static::DEVICE_GROUPS as $group => $osRegexps ) {
+			foreach ( $osRegexps as $osRegexp ) {
+				if ( 1 === \preg_match( $osRegexp, $this->getDeviceID() ) ) {
 					return $group;
 				}
 			}
 		}
+
+		return 0;
 	}
 
+	/**
+	 * Fill lazy loaded $devices.
+	 *
+	 * Consumers should be hesitant to use this function, and should try to get
+	 * the devices from Profile::getDevices() first, since it may already have
+	 * loaded them into memory.
+	 *
+	 * @param CAT    $cat       CAT instance
+	 * @param int    $idpID     Identity provider ID
+	 * @param int    $profileID Profile ID
+	 * @param string $lang      Language
+	 *
+	 * @see https://cat.eduroam.org/doc/UserAPI/tutorial_UserAPI.pkg.html#actions.listDevices
+	 */
+	private static function loadDevices( CAT $cat, int $idpID, int $profileID, string $lang = '' ): void
+	{
+		if ( !isset( static::$devices[$cat->getBase()][$lang][$idpID][$profileID] ) ) {
+			$devices = Profile::getRawDevicesByProfileID( $cat, $profileID, $lang );
+			if ( !$devices ) {
+				$devices = $cat->listDevices( $profileID );
+			}
+			foreach ( $devices as $device ) {
+				static::$devices[$cat->getBase()][$lang][$idpID][$profileID][$device->id] = $device;
+			}
+		}
+	}
 }

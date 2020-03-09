@@ -31,7 +31,7 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.ph
 </h1>
 <h2 class="h5">Choose an installer to download</h2>
 
-<?php foreach(\Eduroam\Connect\Device::groupDevices($profile->getDevices()) as $group => $devices) { ?>
+<?php foreach(\eduroam\CAT\Device::groupDevices($profile->getDevices()) as $group => $devices) { ?>
 <h3><?= o($group) ?></h3>
 <ul>
 <?php foreach($devices as $device) { ?>
