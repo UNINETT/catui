@@ -32,7 +32,7 @@ script.  If you miss any dependencies, the script will alert you
 about this.  The application requires PHP 7 with json and
 curl extensions.
 
-	./dev.sh
+	make
 
 ## Installation
 A simple webserver supporting PHP will do.  Point the document
