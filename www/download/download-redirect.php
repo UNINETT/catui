@@ -7,4 +7,3 @@
 <p class="alert bg-warning cat-redirect-text">
 Your profile is available on <a href="<?= o($device->getRedirect()) ?>"><?= o($device->getRedirect()) ?></a>
 </p>
-<?= $device->getMessage() ?>
