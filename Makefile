@@ -12,7 +12,7 @@ phpver:
 	php $(php_settings) -r 'exit((int)(version_compare(PHP_VERSION, "7.0.0") < 0));'
 
 phpjson:
-	php $(php_settings) -r 'json_decode("{foo: \"bar\"}") === ["foo" => "bar"];'
+	php $(php_settings) -r 'json_decode("{}");'
 
 phpcurl:
 	php $(php_settings) -r 'curl_init();'
