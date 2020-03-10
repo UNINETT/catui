@@ -72,7 +72,7 @@ class PemDevice extends Device
 	 *
 	 * @return string Plaintext message, safe to put in HTML
 	 */
-	public function getMessage()
+	public function getMessage(): string
 	{
 		return 'This option allows an experienced user to get the CA certificate used by this institutions RADIUS server, in order to configure eduroam manually.  Note that any EAP and proxy settings are not included, and you may need to contact your institution to ask about those.';
 	}

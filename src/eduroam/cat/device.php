@@ -318,13 +318,20 @@ class Device
 	 *
 	 * @deprecated
 	 *
-	 * @return null|string HTML message, without enclosing <p>
+	 * @return ?string HTML message, without enclosing <p>
 	 */
-	public function getMessage()
+	public function getMessage(): ?string
 	{
 		if ( isset( $this->getRaw()->message ) ) {
+			if ( 0 === $this->getRaw()->message ) {
+				// This is observed for device-specific redirects
+				return null;
+			}
+
 			return $this->getRaw()->message;
 		}
+
+		return null;
 	}
 
 	/**
