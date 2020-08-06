@@ -44,7 +44,7 @@ class Device
 		'android_nougat' => ['/Android 7[._][0-9]/'],
 		'android_oreo' => ['/Android 8[._][0-9]/'],
 		'android_pie' => ['/Android 9[._][0-9]/'],
-		'android_q' => ['/Android 10[._][0-9]/', '/Android 1[1-9]/', '/Android [2-9][0-9]/'],
+		'android_q' => ['/Android 10[._][0-9]/', '/Android 1[0-9]/', '/Android [2-9][0-9]/'],
 		0 => ['//'],
 	];
 
