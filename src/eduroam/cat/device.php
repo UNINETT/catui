@@ -5,7 +5,7 @@
  * A client to download data from https://cat.eduroam.org/
  *
  * Copyright: 2018-2020, Jørn Åne de Jong, Uninett AS <jorn.dejong@uninett.no>
- * SPDX-License-Identifier: BSD-3-Clause
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 namespace eduroam\CAT;
@@ -44,7 +44,7 @@ class Device
 		'android_nougat' => ['/Android 7[._][0-9]/'],
 		'android_oreo' => ['/Android 8[._][0-9]/'],
 		'android_pie' => ['/Android 9[._][0-9]/'],
-		'android_q' => ['/Android 10[._][0-9]/', '/Android 1[0-9]/', '/Android [2-9][0-9]/'],
+		'android_q' => ['/Android 10[._][0-9]/', '/Android 1[1-9]/', '/Android [2-9][0-9]/'],
 		0 => ['//'],
 	];
 
@@ -244,7 +244,10 @@ class Device
 	/**
 	 * Get the status of this device.
 	 *
-	 * It's not clear what this means, but 0 appears to mean success.
+	 * It's not clear what this means,
+	 * 0 appears to mean success (observed in many profiles)
+	 * 1 appears to be unavailble (observed in idp=627&profile=1052 and idp=2180&profile=3830)
+	 * -1 has not been observed, we use it as default value
 	 *
 	 * @return int status
 	 */
@@ -262,10 +265,6 @@ class Device
 	 * Get the redirect URL where the configuration for this device can be
 	 * obtained.  This feature may be used by an identity provider that has custom
 	 * profiles or those that want to push extra settings through their profiles.
-	 *
-	 * If this device is available through CAT, this function will return a falsey
-	 * value.  Use #getDownloadLink() to always get a link you can send your user
-	 * to.
 	 *
 	 * @return string Redirect URL
 	 */
@@ -372,10 +371,6 @@ class Device
 	 */
 	public function getDownloadLink(): string
 	{
-		if ( $this->isRedirect() ) {
-			return $this->getRaw()->redirect;
-		}
-
 		return $this->cat->getDownloadInstallerURL( $this->deviceID, $this->profileID );
 	}
 

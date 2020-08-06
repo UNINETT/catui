@@ -5,7 +5,7 @@
  * A client to download data from https://cat.eduroam.org/
  *
  * Copyright: 2018-2020, Jørn Åne de Jong, Uninett AS <jorn.dejong@uninett.no>
- * SPDX-License-Identifier: BSD-3-Clause
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 namespace eduroam\CAT;
