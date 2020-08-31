@@ -1,6 +1,6 @@
 <?php require dirname(dirname(__DIR__)) . implode(DIRECTORY_SEPARATOR, ['', 'src', '_autoload.php']);
 
-$cat = new \eduroam\CAT\CAT();
+$cat = new \eduroam\CAT\CAT('nb');
 $profiles = \eduroam\CAT\Profile::getProfilesByIdPEntityID($cat, $_GET['idp']);
 
 function build_download_query($profile) {

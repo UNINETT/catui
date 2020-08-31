@@ -1,33 +1,32 @@
 <?php
 $title = 'eduroam ' . $idp->getDisplay();
-require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
+require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.php']);
 ?>
 
-<ol class="breadcrumb">
-	<li><a href="../idps/?c=<?= o($idp->getCountry()) ?>">eduroam</a></li>
-	<li class="active"><?= o($idp->getDisplay()) ?></li>
-</ol>
-
 <div class="container">
-<div class="row">
-<div class="col-xs-12 col-sm-push-8 col-sm-4 col-md-push-9 col-md-3 col-lg-push-9 col-lg-3 support">
-<?php include 'support.php'; ?>
-</div>
+<div class="row narrow-section">
 
-<main class="col-xs-12 col-sm-pull-4 col-sm-8 col-md-pull-3 col-md-9 col-lg-pull-3 col-lg-9">
-<h2>Profiles at <?= o($idp->getDisplay()) ?></h2>
+<main class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<h2 class="h4"><?= o($idp->getDisplay()) ?></h2>
 <p>Select the user group</p>
-<ul class="cat-profiles">
+<ul class="cat-profiles list-unstyled">
 <?php foreach($profiles as $profile) { ?>
 <li>
-<a href="<?= o('/download/?' . build_download_query($profile)) ?>" class="btn btn-primary">
+<a href="<?= o('/download/?' . build_download_query($profile)) ?>" class="btn btn-link btn-block">
 <?= $profile->getDisplay() ?>
 </a>
 </li>
 <?php } ?>
 </ul>
 </main>
+
+<?php /*
+<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 support">
+<?php include 'support.php'; ?>
+</div>
+*/ ?>
+
 </div>
 </div>
 
-<?php require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'footer.php']); ?>
+<?php require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'footer.php']); ?>

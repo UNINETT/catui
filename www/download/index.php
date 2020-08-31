@@ -11,7 +11,7 @@ function makeQueryString($args) {
 	return '?' . http_build_query($args);
 }
 
-$cat = new \eduroam\CAT\CAT();
+$cat = new \eduroam\CAT\CAT('nb');
 $idp = new \eduroam\CAT\IdentityProvider($cat, $_GET['idp']);
 $profile = new \eduroam\CAT\Profile($cat, $_GET['idp'], $_GET['profile']);
 $profiles = \eduroam\CAT\Profile::getProfilesByIdPEntityID($cat, $_GET['idp']);

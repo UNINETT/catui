@@ -1,60 +1,34 @@
 <?php
 $title = 'eduroam providers';
-require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'header.php']);
+require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.php']);
 ?>
 
-<ol class="breadcrumb">
-	<li class="active">eduroam</li>
-</ol>
-
 <main class="container">
-<div class="row">
+<div class="row narrow-section">
 <div class="cat-institution-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<h1 class="h2"><span class="hidden-xs">Search</span> eduroam provider</h1>
+	<h1 class="h4">Koble til eduroam</h1>
 	<form method="GET" action="./">
 	<?php foreach($_GET as $key => $value) if ($key !== 'inst_search') {
 		echo '<input type="hidden" name="' . o($key) . '" value="' . o($value) . '">';
 	} ?>
-	<p><input type="search" class="form-control input-lg" name="inst_search" id="cat-inst-search" value="<?= o($_GET['inst_search'] ?? '') ?>" placeholder="institution name" autofocus></p>
+	<p><input type="search" class="form-control form-control-lg" name="inst_search" id="cat-inst-search" value="<?= o($_GET['inst_search'] ?? '') ?>" placeholder="Finn din institusjon" autofocus style="border:1px solid #1B4176;box-shadow:none"></p>
 	</form>
-</div>
-</div>
-<div class="row">
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<ul class="cat-inst-action" style="text-align: right">
-		<?php if (!isset($_GET['geo'])) { ?>
-		<li class="pull-left" style="display:none">
-			<span class="glyphicon glyphicon-map-marker"></span>
-			<a href="javascript:cat_geolocate()"<?= isset($_GET['geo']) ? ' class="disabled"' : '' ?>>
-			<span class="hidden-xs">Find institutions</span>
-			nearby</a>
-		</li>
-		<?php } ?>
-		<li>
-			<span class="glyphicon glyphicon-globe"></span>
-			<a href="https://cat.eduroam.org/">
-			<span class="hidden-xs">Show all institutions</span>
-			worldwide</a>
-		</li>
-	</ul>
-</div>
-</div>
-<div class="row">
-<?php if (!isset($_GET['inst_search']) || !$_GET['inst_search']) { ?>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alert alert-info text-center" id="cat-welcome">
-Welcome to the eduroam configurator.
-<strong>Easy eduroam configuration for your mobile or PC</strong>.
-Enter the name of your institution in the box to get started.
-</div>
+
+<?php if (!isset($_GET['geo'])) { ?>
+<p id="cat-inst-geo" class="collapse small mb-4">
+	<span class="glyphicon glyphicon-map-marker"></span>
+	<a href="javascript:cat_geolocate()" class="<?= isset($_GET['geo']) ? 'disabled ' : '' ?>link-dark text-reset">
+	Institusjoner i nærheten</a>
+</p>
 <?php } ?>
 </div>
-<div class="row">
-<div class="col-sm-12 col-md-12 col-lg-12 cat-institution-select">
-	<ul class="insts<?= isset($_GET['inst_search']) ? ' filtered' : '' ?>">
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+	<ul id="cat-institution-list" class="list-unstyled <?= isset($_GET['inst_search']) ? ' filtered' : '' ?>">
 		<?php
 		foreach($idps as $idp) {
 		?>
-		<li<?= !isset($_GET['inst_search']) || $idp->hasSearchMatch($_GET['inst_search']) ? '' : ' style="display:none"' ?>><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>" class="btn <?= $idp->size ?>">
+		<li class="collapse<?= !isset($_GET['inst_search']) || $idp->hasSearchMatch($_GET['inst_search']) ? ' show' : '' ?>"><a href="../profiles/?idp=<?= o($idp->getEntityID()) ?>" class="text-decoration-none btn btn-link btn-block <?= $idp->size ?>">
 			<span class="title"><?= o($idp->getTitle()) ?></span>
 			<?php if(isset($geo) && $idp->getGeo()) { ?>
 			<small><small class="cat-distance"><?= round(min($idp->getDistanceFrom($lat, $lon))) ?>&nbsp;km</small></small>
@@ -63,45 +37,69 @@ Enter the name of your institution in the box to get started.
 		<?php } ?>
 	</ul>
 </div>
+
+<p class="mt-5 mb-5">
+	<a href="https://cat.eduroam.org/" class="link-dark text-reset">
+	Se alle institusjoner hvor eduroam er tilgjengelig
+	</a>
+</p>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="cat-welcome">
+<p>Linken laster ned en eduroam-profil på din enhet. Slik får du eduroam installert:</p>
+
+<ul>
+	<li class="mb-3">Velg din institusjon</li>
+	<li class="mb-3">Last ned riktig eduroam-profil for din institusjon</li>
+	<li class="mb-3">Fyll inn brukernavn og passord</li>
+</ul>
+
+<?php require __DIR__ . DIRECTORY_SEPARATOR . 'info.php'; ?>
+
 </div>
 
 </main>
 
-<?php require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'style', 'footer.php']); ?>
+<?php require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'footer.php']); ?>
 
 <script type="application/javascript">
 <?php if (!isset($_GET['geo'])) { ?>
 if (navigator.geolocation) {
-	$('.cat-inst-action li').show();
+	document.getElementById('cat-inst-geo').classList.add('show');
 };
+for(let item of document.getElementById('cat-institution-list').getElementsByTagName('li')) {
+	item.classList.add('collapse');
+}
 <?php } ?>
 
 function inst_search() {
-	var needles = $('#cat-inst-search').val().trim().split(/[\s,]+/);
+	var needles = document.getElementById('cat-inst-search').value.trim().split(/[\s,]+/);
+	// If empty string, make needles that will never match
+	if (needles.length == 1 && needles[0] == "") needles = ['123456789123456789123456789'];
 	var shown = 0, hidden = 0;
-	$('ul.insts li').each(function(index){
-		var elem = this;
+	for(let elem of document.getElementById('cat-institution-list').getElementsByTagName('li'))
+	{
 		if (needles.reduce(function(carry, item){
-			return (carry && (item.length == 0 || $(elem, '.title').text().toLowerCase().indexOf(item.toLowerCase()) > -1))
+			var text = elem.getElementsByClassName('title')[0].textContent;
+			return (carry && (text.toLowerCase().indexOf(item.toLowerCase()) > -1))
 		}, true)) {
-			$(this).show();
+			elem.classList.add('show');
 			shown += 1;
 		} else {
-			$(this).hide();
+			elem.classList.remove('show');
 			hidden += 1;
 		}
-	});
+	}
 	if (shown == 1) {
-		$('ul.insts').removeClass('filtered');
-		$('ul.insts').addClass('match');
-		$('#cat-welcome').hide();
+		document.getElementById('cat-institution-list').classList.remove('filtered');
+		document.getElementById('cat-institution-list').classList.add('match');
+		document.getElementById('cat-welcome').classList.remove('show');
 	} else if (hidden == 0) {
-		$('ul.insts').removeClass('filtered');
-		$('ul.insts').removeClass('match');
+		document.getElementById('cat-institution-list').classList.remove('filtered');
+		document.getElementById('cat-institution-list').classList.remove('match');
 	} else {
-		$('ul.insts').addClass('filtered');
-		$('ul.insts').removeClass('match');
-		$('#cat-welcome').hide();
+		document.getElementById('cat-institution-list').classList.add('filtered');
+		document.getElementById('cat-institution-list').classList.remove('match');
+		document.getElementById('cat-welcome').classList.remove('show');
 	}
 
 };
@@ -113,7 +111,8 @@ function cat_geolocate() {
 	});
 };
 
-$('#cat-inst-search').keyup(inst_search);
-$('#cat-inst-search').change(inst_search);
+
+document.getElementById('cat-inst-search').onkeyup = inst_search;
+document.getElementById('cat-inst-search').onchange = inst_search;
 inst_search();
 </script>

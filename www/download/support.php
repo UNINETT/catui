@@ -54,36 +54,41 @@ function url($url) {
 	return $result;
 }
 ?>
-<h2 class="h3"><?= o($idp->getDisplay()) ?></h2>
-<?php if (!is_null($idp->getIconID())) { ?>
-<p><img src="<?= o($idp->getIconUrl()) ?>" alt="<?= o($idp->getDisplay()) ?> logo" class="cat-idp-logo">
-<?php } ?>
-<?php if ($profile->getDescription()) { ?>
+<?php if (!is_null($idp->getIconID())): ?>
+<p><img src="<?= o($idp->getIconUrl()) ?>" alt="<?= o($idp->getDisplay()) ?> logo" class="img-fluid cat-idp-logo">
+<?php endif; ?>
+<?php if ($profile->getDescription() && !in_array($profile->getDescription(), ['eduroam', '0'])) { ?>
 <p><?= o($profile->getDescription()) ?>
 
 <hr>
 
 <?php } if ($profile->hasSupport()) { ?>
-<p>If you encounter problems, then you can obtain direct assistance from you home organisation at:</p>
+<p>Ta kontakt med din institusjon dersom du trenger hjelp</p>
 <address class="cat-support-contact">
+<?php if (!in_array($profile->getDescription(), ['eduroam', '0'])): ?>
 <span><strong><?= o($profile->getDisplay()) ?></strong></span>
+<?php else: ?>
+<span><strong><?= o($idp->getDisplay()) ?></strong></span>
+<?php endif; ?>
+<ul>
 <?php if($profile->getLocalEmail()) { ?>
-<span><span class="glyphicon glyphicon-envelope"></span>
+<li><span class="glyphicon glyphicon-envelope"></span>
 <a href="<?= o($profile->getLocalEmail()) ?>"><?= o($profile->getLocalEmail()) ?></a>
-</span>
+</li>
 <?php } ?>
 
 <?php if($profile->getLocalPhone()) { ?>
-<span><span class="glyphicon glyphicon-earphone"></span>
+<li><span class="glyphicon glyphicon-earphone"></span>
 <a href="tel:<?= o($profile->getLocalPhone()) ?>"><?= o($profile->getLocalPhone()) ?></a>
-</span>
+</li>
 <?php } ?>
 
 <?php if($profile->getLocalUrl()) { ?>
-<span><span class="glyphicon glyphicon-globe"></span>
+<li><span class="glyphicon glyphicon-globe"></span>
 <a href="<?= o(href($profile->getLocalUrl())) ?>"><?= o(url($profile->getLocalUrl())) ?></a>
-</span>
+</li>
 <?php } ?>
+</ul>
 </address>
 <?php } else { ?>
 <p>If you encounter problems you should ask for help at your home institution.</p>

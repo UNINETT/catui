@@ -1,5 +1,32 @@
 <?php require dirname(dirname(__DIR__)) . implode(DIRECTORY_SEPARATOR, ['', 'src', '_autoload.php']);
 
+$os = null;
+if (isset($_GET['os'])) {
+	$os = $_GET['os'];
+} else {
+	if (array_key_exists('HTTP_SEC_CH_PLATFORM', $_SERVER)) {
+		$os = \eduroam\CAT\Device::guessDeviceID($_SERVER['HTTP_SEC_CH_PLATFORM']);
+	} else {
+		header('Accept-CH: Platform');
+		if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
+			$os = \eduroam\CAT\Device::guessDeviceID($_SERVER['HTTP_USER_AGENT']);
+		}
+	}
+}
+
+switch($os) {
+	case 'w10':
+		require 'geteduroam-windows.php';
+		exit;
+	case 'android_q':
+	case 'android_pie':
+		require 'geteduroam-android.php';
+		exit;
+	case 'mobileconfig12':
+		require 'geteduroam-ios.php';
+		exit;
+}
+
 if (!isset($_GET['c'])) {
 	$_GET['c'] = 'NO';
 }
@@ -30,7 +57,7 @@ if (isset($_GET['geo'])) {
 	}
 }
 
-$cat = new \eduroam\CAT\CAT();
+$cat = new \eduroam\CAT\CAT('nb');
 
 $idps = \eduroam\CAT\IdentityProvider::getIdentityProvidersByCountry($cat, $_GET['c']);
 if (isset($_GET['inst_search']) && $_GET['inst_search']) {

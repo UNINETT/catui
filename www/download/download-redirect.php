@@ -1,9 +1,5 @@
-<p class="cat-download">Download your eduroam profile<br>
-<a class="btn btn-warning cat-btn-redirect" href="<?= o($device->getRedirect()) ?>"><big><big>
-<strong><?= o($profile->getDisplay()) ?></strong><br>
-<small><small><small class="cat-device-id"><?= o($device->getDisplay()) ?></small></small></small>
-</big></big></a>
-</p>
 <p class="alert bg-warning cat-redirect-text">
-Your profile is available on <a href="<?= o($device->getRedirect()) ?>"><?= o($device->getRedirect()) ?></a>
+Din institusjon bruker en annen prosedyre for å få deg på nett.<br>
+Klikk på lenken for å bli sendt til institusjonens side for oppkobling.
+<a class="btn btn-link" href="<?= o($device->getRedirect()) ?>"><?= o($device->getRedirect()) ?></a>
 </p>

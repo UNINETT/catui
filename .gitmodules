@@ -1,3 +1,6 @@
 [submodule "lib/git.sr.ht/eduroam/php-cat-client"]
 	path = lib/git.sr.ht/eduroam/php-cat-client
 	url = https://git.sr.ht/~eduroam/php-cat-client
+[submodule "lib/github.com/Uninett/uninett-bs-theme"]
+	path = lib/github.com/Uninett/uninett-bs-theme
+	url = https://github.com/Uninett/uninett-bs-theme.git
