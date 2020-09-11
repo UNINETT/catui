@@ -2,6 +2,7 @@
 $title = 'eduroam providers';
 require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.php']);
 ?>
+<script async src="/js/instSearch.js"></script>
 
 <main class="container">
 <div class="row">
@@ -52,48 +53,10 @@ for(let item of document.getElementById('cat-institution-list').getElementsByTag
 }
 <?php } ?>
 
-function inst_search() {
-	var needles = document.getElementById('cat-inst-search').value.trim().split(/[\s,]+/);
-	// If empty string, make needles that will never match
-	if (needles.length == 1 && needles[0] == "") needles = ['123456789123456789123456789'];
-	var shown = 0, hidden = 0;
-	for(let elem of document.getElementById('cat-institution-list').getElementsByTagName('li'))
-	{
-		if (needles.reduce(function(carry, item){
-			var text = elem.getElementsByClassName('title')[0].textContent;
-			return (carry && (text.toLowerCase().indexOf(item.toLowerCase()) > -1))
-		}, true)) {
-			elem.classList.add('show');
-			shown += 1;
-		} else {
-			elem.classList.remove('show');
-			hidden += 1;
-		}
-	}
-	if (shown == 1) {
-		document.getElementById('cat-institution-list').classList.remove('filtered');
-		document.getElementById('cat-institution-list').classList.add('match');
-		document.getElementById('cat-welcome').classList.remove('show');
-	} else if (hidden == 0) {
-		document.getElementById('cat-institution-list').classList.remove('filtered');
-		document.getElementById('cat-institution-list').classList.remove('match');
-	} else {
-		document.getElementById('cat-institution-list').classList.add('filtered');
-		document.getElementById('cat-institution-list').classList.remove('match');
-		document.getElementById('cat-welcome').classList.remove('show');
-	}
-
-};
-
 function cat_geolocate() {
 	navigator.geolocation.getCurrentPosition(function(position){
 		geo = position.coords.latitude + ',' + position.coords.longitude;
 		window.location = <?= json_encode($geoQueryString, JSON_HEX_TAG) ?> + geo;
 	});
 };
-
-
-document.getElementById('cat-inst-search').onkeyup = inst_search;
-document.getElementById('cat-inst-search').onchange = inst_search;
-inst_search();
 </script>
