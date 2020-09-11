@@ -64,6 +64,12 @@ require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.p
 	</ul>
 </div>
 
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+<?php include __DIR__ . DIRECTORY_SEPARATOR . 'info.php'; ?>
+</div>
+</div>
+
 </main>
 
 <?php require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'footer.php']); ?>
