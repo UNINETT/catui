@@ -51,6 +51,11 @@ function resetSearch() {
 	instSearch();
 }
 
+function showMore() {
+	document.getElementById('cat-institution-list').setAttribute('data-current-limit', 0);
+	instSearch();
+}
+
 document.getElementById('cat-inst-search').onkeyup = resetSearch;
 document.getElementById('cat-inst-search').onchange = resetSearch;
 resetSearch();
