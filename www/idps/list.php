@@ -38,25 +38,6 @@ require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.p
 	</ul>
 </div>
 
-<p class="mt-5 mb-5">
-	<a href="https://cat.eduroam.org/" class="link-dark text-reset">
-	Se alle institusjoner hvor eduroam er tilgjengelig
-	</a>
-</p>
-
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="cat-welcome">
-<p>Linken laster ned en eduroam-profil på din enhet. Slik får du eduroam installert:</p>
-
-<ul>
-	<li class="mb-3">Velg din institusjon</li>
-	<li class="mb-3">Last ned riktig eduroam-profil for din institusjon</li>
-	<li class="mb-3">Fyll inn brukernavn og passord</li>
-</ul>
-
-<?php require __DIR__ . DIRECTORY_SEPARATOR . 'info.php'; ?>
-
-</div>
-
 </main>
 
 <?php require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'footer.php']); ?>
