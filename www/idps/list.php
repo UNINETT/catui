@@ -4,7 +4,7 @@ require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.p
 ?>
 
 <main class="container">
-<div class="row narrow-section">
+<div class="row">
 <div class="cat-institution-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<h1 class="h4">Koble til eduroam</h1>
 	<form method="GET" action="./">
