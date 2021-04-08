@@ -1,4 +1,11 @@
 <?php
+if (in_array($device->getDeviceID(), ['w10', 'android_8_10', 'android_recent'], true)) {
+	if (!$device->isRedirect() || substr($device->getRedirect(), -9) !== '#letswifi') {
+		require 'download-app.php';
+		return;
+	}
+}
+
 $bootstrapStyle = $device->isRedirect() ? 'btn btn-warning' : 'btn btn-success';
 $catStyle = $device->isRedirect() ? 'cat-btn-redirect' : 'cat-btn-download';
 

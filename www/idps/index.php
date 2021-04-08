@@ -14,19 +14,6 @@ if (isset($_GET['os'])) {
 	}
 }
 
-switch($os) {
-	case 'w10':
-		require 'geteduroam-windows.php';
-		exit;
-	case 'android_q':
-	case 'android_pie':
-		require 'geteduroam-android.php';
-		exit;
-	case 'mobileconfig12':
-		require 'geteduroam-ios.php';
-		exit;
-}
-
 if (!isset($_GET['c'])) {
 	$_GET['c'] = 'NO';
 }
@@ -57,7 +44,7 @@ if (isset($_GET['geo'])) {
 	}
 }
 
-$cat = new \eduroam\CAT\CAT('nb');
+$cat = new \eduroam\CAT\CAT();
 
 $idps = \eduroam\CAT\IdentityProvider::getIdentityProvidersByCountry($cat, $_GET['c']);
 if (isset($_GET['inst_search']) && $_GET['inst_search']) {

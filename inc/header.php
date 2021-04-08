@@ -5,7 +5,7 @@ function o($s) {
 $legal = 'This web page is licensed under the terms of the GNU Affero General Public License.<br>
 Configuration profiles are provided under the GÉANT CAT terms of service.';
 function menuLink($href, $text) {
-	$out = ($href === $_SERVER['REQUEST_URI'])
+	$out = ($href === (strstr($_SERVER['REQUEST_URI'], '?', true) ?: $_SERVER['REQUEST_URI']))
 		? '<a class="nav-link active" aria-current="page">'
 		: '<a href="' . htmlspecialchars($href, ENT_HTML5 | ENT_COMPAT) . '" class="nav-link">'
 		;
@@ -19,7 +19,7 @@ function menuLink($href, $text) {
 <link rel="stylesheet" href="/dist/css/uninett.css" type="text/css">
 <style type="text/css">
 /* todo implement in uninett theme */
-html, nav {
+html, nav.navbar {
 	min-width:22rem;
 }
 .nav-item {
@@ -53,6 +53,136 @@ nav.navbar-eduroam {
 		order: 3;
 	}
 }
+
+main#jumbotron {
+	width: calc(17rem + 17vw);
+	margin-left: 9vw;
+	margin-top: 8vh;
+	padding: 4vh 4vw;
+	font-size: calc(.7em + .4vw);
+	background-color: rgba(255,255,255,.8);
+	-webkit-backdrop-filter: blur(5px);
+	backdrop-filter: blur(5px);
+}
+main#jumbotron h1, main#jumbotron .h1 {
+	font-size: calc(2.75rem + 1.5vw); /* modified from h1, .h1 */
+	font-family: "Colfax", "colfaxBold", "colfaxRegular", var(--bs-font-sans-serif);
+	line-height: .85;
+	margin-bottom: .4em;
+}
+main#jumbotron h1 strong, main#jumbotron .h1 strong {
+	font-weight: inherit;
+	color: var(--bs-primary);
+}
+main#jumbotron .btn {
+	padding: .8rem 1rem;
+	text-align: left;
+	min-width: calc(8rem + 4vw);
+}
+.btn-primary,
+.btn-outline-primary {
+	font-family: "Colfax", "colfaxBold", "colfaxRegular", var(--bs-font-sans-serif);
+	text-transform: inherit;
+	box-shadow: rgba(0,0,0,.3) 0 .2rem .2rem;
+}
+.btn-primary::after,
+.btn-outline-primary::after {
+	display: inline-block;
+	content: '⌃';
+	transform: rotate(90deg);
+	float:right;
+	left: 0;
+}
+
+details {
+	border-bottom: .1em solid #ccc;
+	padding: .5em;
+	transition: .05s ease-in-out;
+}
+details p {
+	margin-top: 1em;
+	margin-bottom: 0;
+}
+details > summary {
+	list-style: none;
+	outline: none;
+	display: block;
+}
+details > summary::focus-visible,
+details::focus-visible > summary {
+	outline: .3em solid var(--bs-primary);
+}
+details > summary::-webkit-details-marker {
+	display: none;
+}
+details > summary::before {
+	content: '⌃';
+	transition: .2s ease-in-out;
+	transform: rotate(180deg);
+	float: right;
+	font-weight: bold;
+	color: var(--bs-primary);
+}
+details[open] {
+	background-color: rgba(0,0,0,.05);
+}
+details[open] > summary::before {
+	transform: rotate(.001deg) translate(0,.2em);
+}
+details[open]:nth-child(2n) > summary::before {
+	transform: rotate(0deg) translate(0,.2em);
+}
+
+details + h1,
+details + h2,
+details + h3,
+details + h4,
+details + h5,
+details + h6,
+details + p {
+	margin-top: 1.5em !important;
+}
+
+nav.sidebar {
+	margin-top: 3rem;
+}
+nav.sidebar ul {
+	list-style: none;
+	text-align: right;
+	padding: 0;
+}
+nav.sidebar li {
+	margin-bottom: 2em;
+	font-family: "Colfax", "colfaxBold", "colfaxRegular", var(--bs-font-sans-serif);
+}
+nav.sidebar li a {
+	text-decoration: none;
+	color: black;
+}
+nav.sidebar li.active {
+	color: var(--bs-primary);
+}
+nav.sidebar li:before {
+	content: '⌃';
+	color: rgba(0,0,0,0);
+	transform: rotate(90deg) translate(-.2em,0);
+	float:right;
+	font-weight: bold;
+	font-size: 1.3em;
+}
+nav.sidebar li.active:before, nav.sidebar li a:hover {
+	color: var(--bs-primary);
+}
+
+footer {
+	color: black;
+	font-size: .9em;
+	font-family: "Colfax", "colfaxBold", "colfaxRegular", var(--bs-font-sans-serif);
+	padding: .5em;
+}
+code {
+	white-space: nowrap;
+}
 </style>
 
 <title>Uninett eduroam</title>
@@ -70,7 +200,7 @@ nav.navbar-eduroam {
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mb-lg-0" style="width:inherit;justify-content: space-around">
 				<li class="nav-item">
-					<?= menuLink('/idps/', 'Koble til eduroam'); ?>
+					<?= menuLink('/download/', 'Koble til eduroam'); ?>
 				</li>
 				<li class="nav-item">
 					<?= menuLink('/join/', 'Tilby eduroam'); ?>

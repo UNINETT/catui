@@ -10,7 +10,7 @@ require dirname(__DIR__, 2) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.p
 		<div class="col">
 			<h2 class="collapse">Tilkobling</h2>
 			<p class="text-center">
-				<a class="btn btn-primary btn-jumbo cat-btn-download" href="/app/geteduroam.exe">Last ned appen<br><small>Windows 10</small></a>
+				<a class="btn btn-primary btn-jumbo cat-btn-download" href="geteduroam.exe">Last ned appen<br><small>Windows 10</small></a>
 			</p>
 			<p>Linken laster ned en eduroam-app på din enhet. Slik får du eduroam installert:</p>
 			<ul>
