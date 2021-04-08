@@ -3,6 +3,20 @@ $title = 'Uninett eduroam';
 require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.php']);
 ?>
 
+<style type="text/css">
+	body, html {
+		height: 100%;
+	}
+
+	footer {
+		border-top: .05rem solid black;
+		background: #fff;
+		position: absolute;
+		bottom: 0;
+		width: min(max(120vh, 95vw), 100%);
+		right: 0;
+	}
+</style>
 
 <main id="jumbotron">
 <h1>Rett på<br><strong>trådløst nett</strong></h1>
