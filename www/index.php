@@ -29,3 +29,5 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.php'
 
 <?php $legal = ''; /* not a CAT page */ ?>
 <?php require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'footer.php']); ?>
+<script src="js/leaflet/leaflet.js"></script>
+<link href="js/leaflet/leaflet.css" ref="stylesheet">

@@ -1,7 +1,7 @@
 
 php_settings = -d error_reporting=E_ALL -d display_errors=On
 
-dev: phpcheck src/eduroam/cat lib/github.com/Uninett/uninett-bs-theme
+dev: phpcheck src/eduroam/cat lib/github.com/Uninett/uninett-bs-theme node_modules
 	php --server [::]:7593 -d arg_separator.input=';&' -d arg_separator.output=';' -t www/
 .PHONY: dev
 
@@ -26,3 +26,6 @@ lib/github.com/Uninett/uninett-bs-theme: submodule
 submodule:
 	git submodule update --init
 .PHONY: submodule
+
+node_modules:
+	npm install
