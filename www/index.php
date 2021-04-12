@@ -45,7 +45,6 @@ require dirname(__DIR__) . implode(DIRECTORY_SEPARATOR, ['', 'inc', 'header.php'
 	}
 
 	.leaflet-tile {
-		filter: brightness(50%) invert(100%) !important;
 	}
 	#map.leaflet-container {
 		background: #fff;
@@ -128,7 +127,7 @@ const map = L.map(
 map.on('zoom', onZoom);
 
 L.tileLayer(
-		'https://maps.eduroam.no/tiles/stamen_toner-background/{z}/{x}/{y}.png',
+		'https://maps.eduroam.no/tiles/eduroam_no/{z}/{x}/{y}.png',
 		{detectRetina: true}
 	).addTo(map);
 
